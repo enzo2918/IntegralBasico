@@ -23,12 +23,6 @@ namespace IntegralBasico
             double divisa = 0;
 
 
-
-
-
-
-
-
             Console.WriteLine("Bienvenido a tu asistente");
             Console.WriteLine();
             do

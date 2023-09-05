@@ -10,6 +10,7 @@ namespace POO
     {
         static void Main(string[] args)
         {
+
         }
     }
 }
