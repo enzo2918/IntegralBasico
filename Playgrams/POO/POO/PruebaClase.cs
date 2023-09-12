@@ -6,7 +6,8 @@ using System.Threading.Tasks;
 
 namespace POO
 {
-    internal class PruebaClase
+    internal class AccederABibliotca
     {
+        Console.WriteLine("Estas registrado?");
     }
 }

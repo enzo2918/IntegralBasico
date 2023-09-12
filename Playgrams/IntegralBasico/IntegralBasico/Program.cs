@@ -271,7 +271,7 @@ namespace IntegralBasico
             {
                 double difpcorporalRedondeado = Math.Round(difpcorporal, 2);
                 StringBuilder cadena = new StringBuilder();
-                cadena.AppendFormat("Ejercicio: {0}\nMusculo: {1}\nPeso: {2}\nRelacion con tu peso: {3}%", 
+                cadena.AppendFormat("Ejercicio: {0}\nMusculo: {1}\nPeso: {2}\nRelacion con tu peso: {3}%",
                     nombre, musculo, peso, difpcorporalRedondeado);
                 return cadena.ToString();
             }
