@@ -10,9 +10,15 @@ namespace POO
     {
         static void Main(string[] args)
         {
-            
-            
+            Bienvenida bienvenida = new Bienvenida();
+            bienvenida.entrada();
 
+            var numbers = new string[10]; 
+            foreach (string numeros in numbers)
+            {
+                Console.Write("{0}" + " ", numeros);
+            }
+            
         }
     }
 }
