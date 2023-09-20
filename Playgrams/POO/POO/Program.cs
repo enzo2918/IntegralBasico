@@ -10,8 +10,10 @@ namespace POO
     {
         static void Main(string[] args)
         {
-            Bienvenida bienvenida = new Bienvenida();
-            bienvenida.entrada();
+            CInicio inicio = new CInicio();
+            inicio.Inicio();
+
+
 
             var numbers = new string[10]; 
             foreach (string numeros in numbers)

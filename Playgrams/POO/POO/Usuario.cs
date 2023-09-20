@@ -8,37 +8,19 @@ namespace POO
 {
     internal class CUsuario
     {
-        private string nombre = "";
-        private string fechanacimiento = "";
-        private string usuario = "";
-        private string contraseña = "";
+        public string Nombre { get; }
+        public string NombreUsuario { get; }
+        public string Contraseña { get; }
 
-        public CUsuario(string pnombre, string pfechanacimiento, string pusuario, string pcontraseña) 
+        public CUsuario(string pnombre, string pusuario, string pcontraseña) 
         { 
-            nombre = pnombre;
-            fechanacimiento = pfechanacimiento; 
-            usuario = pusuario;
-            contraseña = pcontraseña;
+            Nombre = pnombre;
+            NombreUsuario = pusuario;
+            Contraseña = pcontraseña;
         }
         public void mostrar()
         {
-            Console.WriteLine("{0}\n{1}\n{2}\n{3}", nombre, fechanacimiento, usuario, contraseña);
-        }
-        public string Usuario 
-        {          
-            get
-            {
-                return usuario;
-
-            }                       
-        }
-        public string Contraseña
-        {
-            get
-            {
-                return contraseña;
-
-            }
+            Console.WriteLine("{0}\n{1}", Nombre, NombreUsuario);
         }
     }
 }
