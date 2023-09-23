@@ -8,42 +8,28 @@ namespace POO
 {
     internal class CEliminarLibro
     {
-        Prueba blibro = new Prueba("putob", "", "");
+        CInventario inventario = new CInventario();
         CPedir pedir = new CPedir();
         private string eleccion="";
-        public void EliminarLibro()
+        public void EliminarLibro(CLibro[] plibro)
         {
             var eleccion = "";
             Console.WriteLine("Que libro deseas eliminar?");
-            MuestraInventario();
+            inventario.MuestraInventario(plibro);
             eleccion = pedir.pedircadena();
-            Eliminar(eleccion.ToLower());
+            Eliminar(eleccion.ToLower(), plibro);
 
 
         }
-        private void MuestraInventario()
-        {
-            if (blibro.libro[0]  == null) { Console.WriteLine("fallaste"); }
-            for (int n = 0; n< blibro.libro.Length; n++)
-            {
-                if (blibro.libro[n] != null)
-                {
-                    Console.WriteLine("entraste");
-                    Console.WriteLine(n);
-                    blibro.muestra();
-                    
-                }
-                    
-            }
-        }
-        private void Eliminar(string peleccion)
+       
+        private void Eliminar(string peleccion, CLibro[] plibro )
         {
 
-            for (int n = 0;n< blibro.libro.Length; n++)
+            for (int n = 0;n< plibro.Length; n++)
             {
-                if (peleccion == blibro.libro[n].ATitulo)
+                if (peleccion == plibro[n].ATitulo)
                 {
-                    blibro.libro[n] = null;
+                    plibro[n] = null;
                     break;
                 }
             }

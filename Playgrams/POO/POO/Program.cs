@@ -14,7 +14,7 @@ namespace POO
             inicio.Inicio();
 
 
-
+            
             var numbers = new string[10]; 
             foreach (string numeros in numbers)
             {

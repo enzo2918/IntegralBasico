@@ -8,13 +8,15 @@ namespace POO
 {
     internal class CInicio
     {
+
+        public CLibro[] libro = new CLibro[10];
         public void Inicio ()
         {
-            Prueba clibro = new Prueba("putoc", "", "");
             CIngreso ingreso = new CIngreso();
             CPedir pedir = new CPedir();
             CAgregarLibro agrega = new CAgregarLibro();
             CEliminarLibro elimina = new CEliminarLibro();
+            CEditarLibro edita = new CEditarLibro();
             string eleccionp = "";
             do
             {
@@ -26,10 +28,10 @@ namespace POO
                 if (eleccionp == "1" || eleccionp == "si" || eleccionp == "Si")
                 {
                     
-                    var condicion = false;
+                    var condicion = "";
                     var eleccion = 0;
                     condicion = ingreso.UsuarioRegistrado();
-                    if (condicion)
+                    if (condicion == "administrador")
                     {
                         do
                         {
@@ -38,17 +40,31 @@ namespace POO
                             switch (eleccion)
                             {
                                 case 1:
-                                    agrega.AgregarLibro();
-                                    clibro.muestra();
+                                    agrega.AgregarLibro(libro);
                                     break;
                                 case 2:
-                                    clibro.muestra();
-                                    elimina.EliminarLibro();
+                                    elimina.EliminarLibro(libro);
                                     break;
-
-
+                                case 3:
+                                    edita.EditarLibro(libro);
+                                    break;
                             }
                         } while (eleccion != 4);
+                    }
+                    if (condicion == "cliente")
+                    {
+                        do
+                        {
+                            Console.WriteLine("1. Pedir libro\n2. Devolver libro\n3. Salir");
+                            eleccion = pedir.pedirentero();
+                            switch (eleccion)
+                            {
+                                case 1:
+
+                                    break;
+                            
+                            }
+                        } while (eleccion != 3);
 
 
                     }

@@ -17,14 +17,14 @@ namespace POO
         CUsuario administrador = new CUsuario("Enzo Ortiz", "x", "x");
             
         
-        public bool UsuarioRegistrado()
+        public string UsuarioRegistrado()
         {
             var dato1 = "";
             var dato2 = "";
             var condicion1 = false;
             var condicion2 = false;
             var condicion3 = false;
-            var condicion4 = false;
+            var condicion4 = "";
             Console.WriteLine("Escribe tu nombre de usuario");
             dato1 = pedir.pedircadena();
             for (int n = 0; n < persona.Length; n++)
@@ -45,7 +45,7 @@ namespace POO
                 if (dato2 == administrador.Contraseña)
                 {
                     condicion3 = true;
-                    condicion4 = true;
+                    condicion4 = "administrador";
                     Console.WriteLine("Que deseas hacer?");
                     Console.WriteLine();                              
                 }
@@ -70,7 +70,7 @@ namespace POO
                             if (dato2 == persona[n].Contraseña)
                             {
                                 condicion3 = true;
-                                condicion4 = true;
+                                condicion4 = "cliente";
                                 Console.WriteLine("Que deseas hacer?");
                                 Console.WriteLine();
                                 break;
@@ -93,9 +93,10 @@ namespace POO
             {
                  Console.WriteLine("Su contraseña es incorrecta");
             }
-            if (!condicion4) return false;
-            else return true;
-            
+            if (condicion4 == "administrador") return "administrador";           
+            if (condicion4 =="cliente") return "cliente";
+            else return "";
+
         }
         public void UsuarioNoRegistrado()
         {

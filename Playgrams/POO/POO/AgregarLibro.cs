@@ -7,12 +7,10 @@ using System.Threading.Tasks;
 namespace POO
 {
     internal class CAgregarLibro
-    {
-        Prueba alibro = new Prueba("putoa","","");
-        
+    {        
         CPedir pedir = new CPedir();
 
-        public void AgregarLibro()
+        public void AgregarLibro(CLibro[] plibro)
         {
             var t = "";
             var a = "";
@@ -24,14 +22,11 @@ namespace POO
             Console.WriteLine("A que genero literario pertenece\n1. Drama\n2. Ficcion\n" +
                 "3. Misterio\n4. Romance\n5. Autoayuda");
             g = pedir.pedircadena();
-            for (int n = 0; n < alibro.libro.Length; n++)
+            for (int n = 0; n < plibro.Length; n++)
             {
-                if (alibro.libro[n] == null)
+                if (plibro[n] == null)
                 {
-                    Console.WriteLine(n);
-                    alibro = new Prueba(t, a, g);
-                    alibro = new Prueba("bbb", a, g);
-                    alibro.muestra();
+                    plibro[n] = new CLibro(t.ToLower(), a.ToLower(), g.ToLower());
                     break;
                    
                 }
