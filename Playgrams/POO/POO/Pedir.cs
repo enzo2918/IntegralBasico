@@ -6,18 +6,18 @@ using System.Threading.Tasks;
 
 namespace POO
 {
-    internal class CPedir
+    internal class Pedir
     {
         private string dato = "";
         private int seleccion = 0;
-        public int pedirentero() 
+        public int PedirEntero() 
         {
             
             dato = Console.ReadLine();
             seleccion = Convert.ToInt32(dato);
             return seleccion;
         }
-        public string pedircadena()
+        public string PedirCadena()
         {
             dato = Console.ReadLine();
             return dato;

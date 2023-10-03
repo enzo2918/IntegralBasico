@@ -6,31 +6,81 @@ using System.Threading.Tasks;
 
 namespace POO
 {
-    internal class CAgregarLibro
+    internal class AgregarLibro
     {        
-        CPedir pedir = new CPedir();
+        Pedir pedir = new Pedir();
 
-        public void AgregarLibro(CLibro[] plibro)
+        public void Agregar(Libro[] libros)
         {
-            var t = "";
-            var a = "";
-            var g = "";
             Console.WriteLine("Cual es el titulo del libro?");
-            t = pedir.pedircadena();
-            Console.WriteLine("Quien es el autor?");
-            a = pedir.pedircadena();
-            Console.WriteLine("A que genero literario pertenece\n1. Drama\n2. Ficcion\n" +
-                "3. Misterio\n4. Romance\n5. Autoayuda");
-            g = pedir.pedircadena();
-            for (int n = 0; n < plibro.Length; n++)
+            var titulo = pedir.PedirCadena();
+
+            var libroYaExiste = LibroExistente(titulo,libros);
+            if (libroYaExiste)
             {
-                if (plibro[n] == null)
+                Console.WriteLine("Este titulo ya existe");
+                return;
+            }
+
+            Console.WriteLine("Quien es el autor?");
+            var autor = pedir.PedirCadena();
+
+
+            Console.WriteLine("A que genero literario pertenece\nDrama\nFiccion\n" +
+                "Misterio\nRomance\nAutoayuda");
+            var genero = PedirGenero();
+            
+
+            Crearlo(titulo, autor, genero, libros);
+
+            
+        }
+
+        private string PedirGenero()
+        {
+            var genero = "";
+            bool generoCorrecto = false;
+
+            do
+            {
+                genero = pedir.PedirCadena();
+                if (genero.ToLower() == "drama" || genero == "ficcion" || genero == "misterio" || genero == "romance" || genero == "autoayuda")
                 {
-                    plibro[n] = new CLibro(t.ToLower(), a.ToLower(), g.ToLower());
+                    generoCorrecto = true;
+                }
+                else Console.WriteLine("Escriba el genero correctamente");
+
+            } while (!generoCorrecto);
+
+            return genero;
+        }
+        private void Crearlo(string titulo, string autor, string genero, Libro[] libros)
+        {
+            for (int n = 0; n < libros.Length; n++)
+            {
+                if (libros[n] == null)
+                {
+                    libros[n] = new Libro(titulo.ToLower(), autor.ToLower(), genero.ToLower());
                     break;
-                   
                 }
             }
+        }
+        private bool LibroExistente(string titulo, Libro[] libros)
+        {
+            var libroYaExiste = false;
+            for (int n = 0; n < libros.Length; ++n)
+            {
+                if (libros[n] != null)
+                {
+                    if (titulo == libros[n].Titulo)
+                    {
+                        libroYaExiste = true;
+                        break;
+
+                    }
+                }
+            }
+            return libroYaExiste;
         }
     }
 }

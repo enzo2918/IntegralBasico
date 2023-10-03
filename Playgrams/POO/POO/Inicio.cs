@@ -6,78 +6,93 @@ using System.Threading.Tasks;
 
 namespace POO
 {
-    internal class CInicio
+    internal class Inicio
     {
-
-        public CLibro[] libro = new CLibro[10];
-        public void Inicio ()
+        
+        public void Iniciar ()
         {
-            CIngreso ingreso = new CIngreso();
-            CPedir pedir = new CPedir();
-            CAgregarLibro agrega = new CAgregarLibro();
-            CEliminarLibro elimina = new CEliminarLibro();
-            CEditarLibro edita = new CEditarLibro();
-            string eleccionp = "";
+
+            Usuario[] usuarios = new Usuario[5];
+            Libro[] libros = new Libro[10];
+            Prestamo[] prestamos = new Prestamo[50];
+
+            Pedir pedir = new Pedir();
+
+            string Registrado = "";
             do
             {
-
                 Console.WriteLine("Bienvenido a la biblioteca");
                 Console.WriteLine("Estas registrado? 1. Si  2. No 3. Salir");
-                eleccionp = pedir.pedircadena();
+                Registrado = pedir.PedirCadena();
+                Ingreso ingreso = new Ingreso("Enzo Ortiz", "x", "x", true, usuarios);
 
-                if (eleccionp == "1" || eleccionp == "si" || eleccionp == "Si")
+                if (Registrado == "1" || Registrado == "si" || Registrado == "Si")
                 {
-                    
-                    var condicion = "";
-                    var eleccion = 0;
-                    condicion = ingreso.UsuarioRegistrado();
-                    if (condicion == "administrador")
+                    var usuarioAIngresar = ingreso.IniciarSesion();
+                    if (usuarioAIngresar!= null)
                     {
-                        do
+                        if (usuarioAIngresar.EsAdministrador)
                         {
-                            Console.WriteLine("1. Agregar nuevo libro\n2. Eliminar libro\n3. Editar libro\n4. Salir");
-                            eleccion = pedir.pedirentero();
-                            switch (eleccion)
+                            var eleccion = "";
+                            do
                             {
-                                case 1:
-                                    agrega.AgregarLibro(libro);
-                                    break;
-                                case 2:
-                                    elimina.EliminarLibro(libro);
-                                    break;
-                                case 3:
-                                    edita.EditarLibro(libro);
-                                    break;
-                            }
-                        } while (eleccion != 4);
-                    }
-                    if (condicion == "cliente")
-                    {
-                        do
+                                Console.WriteLine("1. Agregar nuevo libro\n2. Eliminar libro\n3. Editar libro\n4. Salir");
+                                eleccion = pedir.PedirCadena();
+                                switch (eleccion)
+                                {
+                                    case "1":
+                                        AgregarLibro agrega = new AgregarLibro();
+                                        agrega.Agregar(libros);
+                                        break;
+                                    case "2":
+                                        EliminarLibro elimina = new EliminarLibro();
+                                        elimina.Eliminar(libros);
+                                        break;
+                                    case "3":
+                                        EditarLibro edita = new EditarLibro();
+                                        edita.Editar(libros);
+                                        break;
+                                    case "4":
+                                        break;
+                                    default: Console.WriteLine("Su seleccion es incorrecta");
+                                        break;
+                                }
+                            } while (eleccion != "4");
+                        }
+                        else
                         {
-                            Console.WriteLine("1. Pedir libro\n2. Devolver libro\n3. Salir");
-                            eleccion = pedir.pedirentero();
-                            switch (eleccion)
+                            var eleccion = "";
+                            do
                             {
-                                case 1:
+                                Console.WriteLine("1. Pedir libro\n2. Devolver libro\n3. Salir");
+                                eleccion = pedir.PedirCadena();
+                                DevolucionLibro devuelve = new DevolucionLibro();
+                                RetiroLibro retira = new RetiroLibro();
+                                switch (eleccion)
+                                {
+                                    case "1":
+                                        retira.Retiro(libros,usuarioAIngresar,prestamos);
+                                        break;
+                                    case "2":
+                                        devuelve.Devolucion(prestamos, libros);
+                                        break;
+                                    case"3":
+                                        break;
+                                    default: Console.WriteLine("Su seleccion es incorrecta");
+                                        break;
+                                }
+                            } while (eleccion !="3");
+                        }
+                    }                    
+                }
+                if (Registrado == "2" || Registrado == "no" || Registrado == "No")
+                {
 
-                                    break;
-                            
-                            }
-                        } while (eleccion != 3);
-
-
-                    }
+                    ingreso.RegistarUsuario();
 
                 }
-                if (eleccionp == "2" || eleccionp == "no" || eleccionp == "No")
-                {
+            } while (Registrado != "3");
 
-                    ingreso.UsuarioNoRegistrado();
-
-                }
-
-            } while (eleccionp != "3");
         }
     }
 }

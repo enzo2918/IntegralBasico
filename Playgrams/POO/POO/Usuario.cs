@@ -6,21 +6,21 @@ using System.Threading.Tasks;
 
 namespace POO
 {
-    internal class CUsuario
+    internal class Usuario
     {
         public string Nombre { get; }
         public string NombreUsuario { get; }
         public string Contraseña { get; }
-
-        public CUsuario(string pnombre, string pusuario, string pcontraseña) 
+        public bool EsAdministrador { get; }
+        public Usuario(string nombre, string usuario, string contraseña, bool esAdministrador) 
         { 
-            Nombre = pnombre;
-            NombreUsuario = pusuario;
-            Contraseña = pcontraseña;
+            Nombre = nombre;
+            NombreUsuario = usuario;
+            Contraseña = contraseña;
+            EsAdministrador = esAdministrador;
+            
         }
-        public void mostrar()
-        {
-            Console.WriteLine("{0}\n{1}", Nombre, NombreUsuario);
-        }
+
+
     }
 }

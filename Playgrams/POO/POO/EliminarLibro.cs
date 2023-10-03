@@ -6,33 +6,36 @@ using System.Threading.Tasks;
 
 namespace POO
 {
-    internal class CEliminarLibro
+    internal class EliminarLibro
     {
-        CInventario inventario = new CInventario();
-        CPedir pedir = new CPedir();
-        private string eleccion="";
-        public void EliminarLibro(CLibro[] plibro)
+        Muestra inventario = new Muestra();
+        Pedir pedir = new Pedir();
+        public void Eliminar(Libro[] libros)
         {
-            var eleccion = "";
             Console.WriteLine("Que libro deseas eliminar?");
-            inventario.MuestraInventario(plibro);
-            eleccion = pedir.pedircadena();
-            Eliminar(eleccion.ToLower(), plibro);
 
+            inventario.MuestraInventario(libros);
+            var eleccion = pedir.PedirCadena();
 
+            Eliminarlo(eleccion.ToLower(), libros);
         }
        
-        private void Eliminar(string peleccion, CLibro[] plibro )
+        private void Eliminarlo(string peleccion, Libro[] libros )
         {
 
-            for (int n = 0;n< plibro.Length; n++)
+            for (int n = 0;n< libros.Length; n++)
             {
-                if (peleccion == plibro[n].ATitulo)
+                if (libros[n] != null)
                 {
-                    plibro[n] = null;
-                    break;
+                    if (peleccion == libros[n].Titulo)
+                    {
+                        libros[n] = null;
+                        return;
+                    }
                 }
+                
             }
+            Console.WriteLine("Este libro no existe");
             
         }
     }

@@ -10,16 +10,14 @@ namespace POO
     {
         static void Main(string[] args)
         {
-            CInicio inicio = new CInicio();
-            inicio.Inicio();
+            var inicio = new Inicio();
+            inicio.Iniciar();
 
-
-            
-            var numbers = new string[10]; 
-            foreach (string numeros in numbers)
-            {
-                Console.Write("{0}" + " ", numeros);
-            }
+            //var numbers = new string[10]; 
+            //foreach (string numeros in numbers)
+            //{
+            //    Console.Write("{0}" + " ", numeros);
+            //}
             
         }
     }

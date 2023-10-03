@@ -4,146 +4,114 @@ using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
 using System.Runtime.CompilerServices;
+using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace POO
 {
-    internal class CIngreso
+    internal class Ingreso
     {
         
-        CPedir pedir = new CPedir();
-        CUsuario[] persona = new CUsuario[5];
-        CUsuario administrador = new CUsuario("Enzo Ortiz", "x", "x");
-            
-        
-        public string UsuarioRegistrado()
+        Pedir pedir = new Pedir();
+        Usuario[] usuarios;
+
+        public Ingreso(string nombre, string usuario, string contraseña, bool esAdministrador,Usuario[] usuariosParametro)
         {
-            var dato1 = "";
-            var dato2 = "";
-            var condicion1 = false;
-            var condicion2 = false;
-            var condicion3 = false;
-            var condicion4 = "";
-            Console.WriteLine("Escribe tu nombre de usuario");
-            dato1 = pedir.pedircadena();
-            for (int n = 0; n < persona.Length; n++)
-            {
-                if (persona[n] == null)
-                {
-                    condicion3 = true;
-                }
-                else condicion3 = false;
-            }
-            if (dato1 == administrador.NombreUsuario)
-            {
-                condicion1 = true;
-                condicion2 = true;
-                Console.WriteLine("Escribe tu contraseña");
-                dato2 = pedir.pedircadena();
-                condicion3 = false;
-                if (dato2 == administrador.Contraseña)
-                {
-                    condicion3 = true;
-                    condicion4 = "administrador";
-                    Console.WriteLine("Que deseas hacer?");
-                    Console.WriteLine();                              
-                }
-
-            }
-            for (int n = 0; n < persona.Length; n++)
-            {
-
-                    
-                    if (persona[n] != null)
-                    {
-                        condicion1 = true;
-                        
-
-                        if (dato1 == persona[n].NombreUsuario)
-                        {
-                            condicion3 = false;
-                            condicion2 = true;
-                            Console.WriteLine("Escribe tu contraseña");
-                            dato2 = pedir.pedircadena();
-
-                            if (dato2 == persona[n].Contraseña)
-                            {
-                                condicion3 = true;
-                                condicion4 = "cliente";
-                                Console.WriteLine("Que deseas hacer?");
-                                Console.WriteLine();
-                                break;
-                            }
-
-                        }
-                    }
-            }
-            if (!condicion1)
-            {
-                 Console.WriteLine("Su usuario es incorrecto");
-                 condicion2 = true;
-            }
-            if (!condicion2)
-            {
-                 condicion3 = true;
-                 Console.WriteLine("Su usuario es incorrecto");
-            }
-            if (!condicion3)
-            {
-                 Console.WriteLine("Su contraseña es incorrecta");
-            }
-            if (condicion4 == "administrador") return "administrador";           
-            if (condicion4 =="cliente") return "cliente";
-            else return "";
-
+            usuarios = usuariosParametro;
+            var usuarioAdministrador = new Usuario(nombre, usuario, contraseña, esAdministrador);
+            usuarios[0] = usuarioAdministrador;
         }
-        public void UsuarioNoRegistrado()
+
+        public Usuario IniciarSesion()
         {
-            var nc = "";
-            var u = "";
-            var con = "";
-            var usuariosllenos = false;
+            Console.WriteLine("Escribe tu nombre de usuario");
+            var nombreUsuario = pedir.PedirCadena();
 
-            for (int n = 0; n < persona.Length; n++)
+            var usuario = BuscarUsuario(nombreUsuario);
+
+            if (usuario == null)
             {
-                var condicion1 = false;
-                if (persona[n] == null)
+                Console.WriteLine("Su usuario es incorrecto");
+                return null; 
+            }
+
+            Console.WriteLine("Escribe tu contraseña");
+            var contraseña = pedir.PedirCadena();
+
+            var contraseñaEsCorrecta = usuario.Contraseña == contraseña;
+            if (!contraseñaEsCorrecta)
+            {
+                Console.WriteLine("Su contraseña es incorrecta");
+                return null;
+            }
+
+            return usuario;
+        }
+        public void RegistarUsuario()
+        {
+            Console.WriteLine("Escribe tu nombre completo");
+            var nombreCompleto = pedir.PedirCadena();
+
+            Console.WriteLine("Crea un usuario");
+            var nombreUsuario = pedir.PedirCadena();
+
+            var usuarioYaExiste = UsuarioExistente(nombreUsuario);
+
+            if (usuarioYaExiste)
+            {
+                Console.WriteLine("Este usuario ya existe");
+                return;
+            }
+
+            Console.WriteLine("Crea una contraseña");
+            var contraseña = pedir.PedirCadena();
+
+            Registrar(nombreCompleto, nombreUsuario, contraseña, false);
+        }
+        private bool UsuarioExistente(string nombreUsuario)
+        {
+            var usuarioYaExiste = false;
+            for (int n = 0; n < usuarios.Length; ++n)
+            {
+                if (usuarios[n] != null)
                 {
-                    usuariosllenos = true;
-                    Console.WriteLine("Escribe tu nombre completo");
-                    nc = pedir.pedircadena();
-                    Console.WriteLine("Crea un usuario");
-                    u = pedir.pedircadena();
-                    for (int m= 0; m < persona.Length; ++m)
+                    if (nombreUsuario == usuarios[n].NombreUsuario)
                     {
-                        if (persona[m] != null)
-                        {
-                            if (u == persona[m].NombreUsuario)
-                            {
-                                condicion1 = true;
-                                Console.WriteLine("Este usuario ya existe");
-                            }
-                        }                      
-                    }
-                    if (!condicion1)
-                    {
-                        Console.WriteLine("Crea una contraseña");
-                        con = pedir.pedircadena();
-                        persona[n] = new CUsuario(nc, u, con);
-                        Console.WriteLine("");
-                        persona[n].mostrar();
-                        Console.WriteLine("");
+                        usuarioYaExiste = true;
                         break;
-                    }                                                              
+                       
+                    }
                 }
-
             }
-            if (!usuariosllenos)
+            return usuarioYaExiste;
+        }
+        private void Registrar(string nombreCompleto, string nombreUsuario, string contraseña,bool esAdministrador)
+        {
+            for (int n = 0; n < usuarios.Length; ++n)
             {
-                Console.WriteLine("Se ha alcanzado el maximo de usuarios, elimine alguno para crear uno nuevo");
+                if (usuarios[n] == null)
+                {
+                    usuarios[n] = new Usuario(nombreCompleto, nombreUsuario, contraseña, false);
+                    break;
+                }
             }
-
+        }
+        private Usuario BuscarUsuario(string nombreUsuario)
+        {
+            Usuario usuarioADevolver = null;
+            for (int n = 0; n < usuarios.Length; n++)
+            {
+                if (usuarios[n] != null)
+                {
+                    if (nombreUsuario == usuarios[n].NombreUsuario)
+                    {
+                        usuarioADevolver = usuarios[n];
+                        break;
+                    }
+                }
+            }
+            return usuarioADevolver;
         }
     }
 }
