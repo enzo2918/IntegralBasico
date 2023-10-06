@@ -16,11 +16,9 @@ namespace POO
         Pedir pedir = new Pedir();
         Usuario[] usuarios;
 
-        public Ingreso(string nombre, string usuario, string contraseña, bool esAdministrador,Usuario[] usuariosParametro)
+        public Ingreso(Usuario[] usuariosParametro)
         {
             usuarios = usuariosParametro;
-            var usuarioAdministrador = new Usuario(nombre, usuario, contraseña, esAdministrador);
-            usuarios[0] = usuarioAdministrador;
         }
 
         public Usuario IniciarSesion()
@@ -56,9 +54,9 @@ namespace POO
             Console.WriteLine("Crea un usuario");
             var nombreUsuario = pedir.PedirCadena();
 
-            var usuarioYaExiste = UsuarioExistente(nombreUsuario);
+            var usuarioYaExiste = BuscarUsuario(nombreUsuario);
 
-            if (usuarioYaExiste)
+            if (usuarioYaExiste!=null)
             {
                 Console.WriteLine("Este usuario ya existe");
                 return;
@@ -69,23 +67,7 @@ namespace POO
 
             Registrar(nombreCompleto, nombreUsuario, contraseña, false);
         }
-        private bool UsuarioExistente(string nombreUsuario)
-        {
-            var usuarioYaExiste = false;
-            for (int n = 0; n < usuarios.Length; ++n)
-            {
-                if (usuarios[n] != null)
-                {
-                    if (nombreUsuario == usuarios[n].NombreUsuario)
-                    {
-                        usuarioYaExiste = true;
-                        break;
-                       
-                    }
-                }
-            }
-            return usuarioYaExiste;
-        }
+       
         private void Registrar(string nombreCompleto, string nombreUsuario, string contraseña,bool esAdministrador)
         {
             for (int n = 0; n < usuarios.Length; ++n)

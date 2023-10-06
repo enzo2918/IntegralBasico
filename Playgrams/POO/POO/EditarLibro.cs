@@ -32,7 +32,7 @@ namespace POO
                 {
                     Console.WriteLine("Cual es el nuevo Titulo?");
                     var nuevoTitulo = pedir.PedirCadena();
-                    var libroYaExiste = LibroExistente(nuevoTitulo, libros);
+                    var libroYaExiste = buscador.LibroExistente(nuevoTitulo, libros);
                     if (libroYaExiste)
                     {
                         Console.WriteLine("Este tiutlo ya existe");
@@ -58,25 +58,6 @@ namespace POO
             else Console.WriteLine("El libro seleccionado no existe");
             
 
-        }
-        
-
-        private bool LibroExistente(string titulo, Libro[] libros)
-        {
-            var libroYaExiste = false;
-            for (int n = 0; n < libros.Length; ++n)
-            {
-                if (libros[n] != null)
-                {
-                    if (titulo == libros[n].Titulo)
-                    {
-                        libroYaExiste = true;
-                        break;
-
-                    }
-                }
-            }
-            return libroYaExiste;
         }
 
     }

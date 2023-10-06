@@ -10,13 +10,22 @@ namespace POO
     {
         public void MuestraInventario(Libro[] libros)
         {
-            for (int n = 0; n < libros.Length; n++)
+            OrdenarAlfabeticamente(libros);
+            Console.WriteLine("hola");
+            for (int a = 0; a < libros.Length; a++)
             {
-                if (libros[n] != null)
-                {
-                    Console.WriteLine(libros[n].Titulo);
-                }
+                if (libros[a] !=null) Console.WriteLine(libros[a].Posicion);
 
+            }
+            for (int n = 0; n < libros.Length; n++)
+            {               
+                for (int m = 0; m < libros.Length; m++)
+                {
+                    if (libros[m] != null && libros[m].Posicion == n)
+                    {
+                        Console.WriteLine(libros[m].Titulo);
+                    }
+                }                                  
             }
         }
         public void MuestraAutor(string autor,Libro[] libros)
@@ -44,11 +53,51 @@ namespace POO
             }
         }
 
-        public void MuestraLibrosPrestados(Prestamo[] prestamos)
+        public void MuestraLibrosPrestados(Prestamo[] prestamos,Usuario usuario)
         {
             for(int n = 0; n < prestamos.Length; n++)
             {
-                if (prestamos[n] != null) Console.WriteLine(prestamos[n].LibroAPrestar.Titulo);
+                if (prestamos[n] != null && prestamos[n].Cliente == usuario) Console.WriteLine(prestamos[n].LibroAPrestar.Titulo);
+            }
+        }
+        public void OrdenarAlfabeticamente(Libro[] libros)
+        {
+            for (int a = 0; a < libros.Length; a++)
+            {
+                if (libros[a] != null)
+                {
+                    libros[a].Posicion = 0;
+                }
+            }
+            for (int n =0; n < libros.Length; n++)
+            {
+                if (libros[n] != null)
+                {
+                    for (int m = 0; m < libros.Length; m++)
+                    {
+                        if (libros[m] != null)
+                        {
+                            if (libros[n] != libros[m])
+                            {
+                                for (int l = 0; l < libros[n].Titulo.Length && l < libros[m].Titulo.Length; l++)
+                                {    
+                                    
+                                    if (libros[n].Titulo[l] > libros[m].Titulo[l])
+                                    {
+                                        libros[n].Posicion = libros[n].Posicion + 1;
+                                        break;
+                                    }
+                                    if (libros[n].Titulo[l] < libros[m].Titulo[l]) break;
+                                                                       
+                                }                               
+                                
+                            }
+                        }
+                        
+
+                    }
+                }
+                
             }
         }
 

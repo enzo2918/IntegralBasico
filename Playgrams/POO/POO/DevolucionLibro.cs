@@ -11,16 +11,16 @@ namespace POO
         Muestra muestra = new Muestra();
         Pedir pedir = new Pedir();
         
-        public void Devolucion(Prestamo[] prestamos, Libro[] libros)
+        public void Devolucion(Prestamo[] prestamos, Libro[] libros,Usuario usuario)
         {
             Console.WriteLine("Cual libro quieres devolver?");
-            muestra.MuestraLibrosPrestados(prestamos);
+            muestra.MuestraLibrosPrestados(prestamos,usuario);
             var tituloLibroADevolver = pedir.PedirCadena();
 
-            Devolver(tituloLibroADevolver, libros, prestamos);
+            Devolver(tituloLibroADevolver, libros, prestamos,usuario);
 
         }
-        private void Devolver(string tituloLibroADevolver, Libro[] libros, Prestamo[] prestamos)
+        private void Devolver(string tituloLibroADevolver, Libro[] libros, Prestamo[] prestamos, Usuario usuario)
         {
             Buscador buscador = new Buscador();
             var libroADevolver = buscador.BuscarLibro(tituloLibroADevolver, libros);
@@ -28,7 +28,7 @@ namespace POO
             {
                 if (prestamos[n] != null)
                 {
-                    if (libroADevolver == prestamos[n].LibroAPrestar)
+                    if (libroADevolver == prestamos[n].LibroAPrestar && prestamos[n].Cliente == usuario)
                     {
                         prestamos[n] = null;
                         Console.WriteLine("Gracias por su devolucion");

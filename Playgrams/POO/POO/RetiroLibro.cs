@@ -16,6 +16,7 @@ namespace POO
             
             Libro libroARetirar = null;
             string categoria;
+            string titulo = "";
 
             Console.WriteLine("Por cual categoria deseas buscar tu libro:\n" +
             "1. Titulo\n2. Autor\n3. Genero\n4. Inventario completo\n5. Salir");
@@ -23,16 +24,16 @@ namespace POO
             switch (categoria)
             {
                 case "1":
-                    libroARetirar = RetiroPorTitulo(libros);
+                    titulo = PorTitulo(libros);
                     break;
                 case "2":
-                    libroARetirar = RetiroPorAutor(libros);
+                    titulo = PorAutor(libros);
                     break;
                 case "3":
-                    libroARetirar = RetiroPorGenero(libros);
+                    titulo = porGenero(libros);
                     break;
                 case "4":
-                    libroARetirar = RetiroPorInventario(libros);
+                    titulo = PorInventario(libros);
                     break;
                 case "5":
                     break;
@@ -41,64 +42,53 @@ namespace POO
                     break;
 
             }
+            libroARetirar = Retirar(titulo, libros);
 
-            var libroYaRetirado = LibroYaRetirado(libroARetirar, prestamos);
             if (libroARetirar != null)
             {
-                if (libroYaRetirado) Console.WriteLine("Este libro se encuentra en posesion de otra persona");                
+                var libroYaRetirado = LibroYaRetirado(libroARetirar, prestamos,usuario);
+                if (libroYaRetirado== "YaPrestadoAOtro") Console.WriteLine("Este libro se encuentra en posesion de otra persona"); 
+                else if (libroYaRetirado == "YaPrestado") Console.WriteLine("Este libro ya se encuentra en tu posesion");
                 else PrestarLibro(usuario,libroARetirar,prestamos);
             }
 
         }
-        private Libro RetiroPorTitulo(Libro[] libros)
+        private string PorTitulo(Libro[] libros)
         {
             Console.WriteLine("Cual es el titulo del libro que buscas?");
             var titulo = pedir.PedirCadena();
-            var libroARetirar = buscador.BuscarLibro(titulo, libros);
-            if (libroARetirar != null) return libroARetirar;
-            else
-            {
-                Console.WriteLine("No contamos con este libro en nuestra biblioteca");
-                return null;
-            }
+            return titulo;
 
         }
              
-        private Libro RetiroPorAutor(Libro[] libros)
+        private string PorAutor(Libro[] libros)
         {
             Console.WriteLine("Cual es el autor del libro que buscas?");
             var autor = pedir.PedirCadena();
             muestra.MuestraAutor(autor, libros);
             Console.WriteLine("Que libro deseas?");
             var titulo = pedir.PedirCadena();
-            var libroARetirar = buscador.BuscarLibro(titulo, libros);
-            if (libroARetirar != null) return libroARetirar;
-            else
-            {
-                Console.WriteLine("No contamos con este libro en nuestra biblioteca");
-                return null;
-            }
+            return titulo;
         }
-        private Libro RetiroPorGenero(Libro[] libros)
+        private string porGenero(Libro[] libros)
         {
             Console.WriteLine("Que genero literario buscas:\nDrama\nFiccion\nMisterio\nRomance\nAutoayuda");
             var genero = pedir.PedirCadena();
             muestra.MuestraGeneros(genero, libros);
             Console.WriteLine("Que libro deseas?");
             var titulo = pedir.PedirCadena();
-            var libroARetirar = buscador.BuscarLibro(titulo, libros);
-            if (libroARetirar != null) return libroARetirar;
-            else
-            {
-                Console.WriteLine("No contamos con este libro en nuestra biblioteca");
-                return null;
-            }
+            return titulo;
         }
-        private Libro RetiroPorInventario(Libro[] libros)
+        private string PorInventario(Libro[] libros)
         {
             muestra.MuestraInventario(libros);
             Console.WriteLine("\nCual libro deseas retirar?");
             var titulo = pedir.PedirCadena();
+            return titulo;
+            
+        }
+        private Libro Retirar(string titulo, Libro[] libros)
+        {
             var libroARetirar = buscador.BuscarLibro(titulo, libros);
             if (libroARetirar != null) return libroARetirar;
             else
@@ -107,22 +97,20 @@ namespace POO
                 return null;
             }
         }
-        private bool LibroYaRetirado(Libro libroARetirar, Prestamo[] prestamos)
-        {
-            if (libroARetirar != null)
+        private string LibroYaRetirado(Libro libroARetirar, Prestamo[] prestamos,Usuario usuario)
+        {            
+            for (int n = 0; n < prestamos.Length; n++)
             {
-                for (int n = 0; n < prestamos.Length; n++)
+                if (prestamos[n] != null)
                 {
-                    if (prestamos[n] != null)
+                    if (prestamos[n].LibroAPrestar == libroARetirar)
                     {
-                        if (prestamos[n].LibroAPrestar == libroARetirar)
-                        {
-                            return true;
-                        }
-                    }
+                        if (prestamos[n].Cliente != usuario) return "YaPrestadoAOtro";
+                        else return "YaPrestado";
+                    }                    
                 }
-            }               
-            return false;
+            }                           
+            return"Disponible";
         }
         
         private void PrestarLibro(Usuario usuario,Libro libroARetirar, Prestamo[] prestamos)

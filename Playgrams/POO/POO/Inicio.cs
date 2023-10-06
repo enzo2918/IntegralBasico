@@ -18,14 +18,18 @@ namespace POO
 
             Pedir pedir = new Pedir();
 
+            var usuarioAdministrador = new Usuario("Enzo Ortiz", "x", "x", true);
+            usuarios[0] = usuarioAdministrador;
+            Ingreso ingreso = new Ingreso(usuarios);
+
             string Registrado = "";
             do
             {
                 Console.WriteLine("Bienvenido a la biblioteca");
                 Console.WriteLine("Estas registrado? 1. Si  2. No 3. Salir");
                 Registrado = pedir.PedirCadena();
-                Ingreso ingreso = new Ingreso("Enzo Ortiz", "x", "x", true, usuarios);
 
+               
                 if (Registrado == "1" || Registrado == "si" || Registrado == "Si")
                 {
                     var usuarioAIngresar = ingreso.IniciarSesion();
@@ -74,7 +78,7 @@ namespace POO
                                         retira.Retiro(libros,usuarioAIngresar,prestamos);
                                         break;
                                     case "2":
-                                        devuelve.Devolucion(prestamos, libros);
+                                        devuelve.Devolucion(prestamos, libros,usuarioAIngresar);
                                         break;
                                     case"3":
                                         break;

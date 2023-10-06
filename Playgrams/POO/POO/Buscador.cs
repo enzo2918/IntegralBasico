@@ -24,5 +24,24 @@ namespace POO
             }
             return libroADevolver;
         }
+        public bool LibroExistente(string titulo, Libro[] libros)
+        {
+            var libroYaExiste = false;
+            for (int n = 0; n < libros.Length; ++n)
+            {
+                if (libros[n] != null)
+                {
+                    if (titulo == libros[n].Titulo)
+                    {
+                        libroYaExiste = true;
+                        break;
+
+                    }
+                }
+            }
+            return libroYaExiste;
+
+        }
+
     }
 }

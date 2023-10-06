@@ -9,13 +9,13 @@ namespace POO
     internal class AgregarLibro
     {        
         Pedir pedir = new Pedir();
-
+        Buscador buscador = new Buscador();
         public void Agregar(Libro[] libros)
         {
             Console.WriteLine("Cual es el titulo del libro?");
             var titulo = pedir.PedirCadena();
 
-            var libroYaExiste = LibroExistente(titulo,libros);
+            var libroYaExiste = buscador.LibroExistente(titulo,libros);
             if (libroYaExiste)
             {
                 Console.WriteLine("Este titulo ya existe");
@@ -65,22 +65,6 @@ namespace POO
                 }
             }
         }
-        private bool LibroExistente(string titulo, Libro[] libros)
-        {
-            var libroYaExiste = false;
-            for (int n = 0; n < libros.Length; ++n)
-            {
-                if (libros[n] != null)
-                {
-                    if (titulo == libros[n].Titulo)
-                    {
-                        libroYaExiste = true;
-                        break;
-
-                    }
-                }
-            }
-            return libroYaExiste;
-        }
+        
     }
 }
