@@ -47,14 +47,20 @@ namespace POO
                                     case "1":
                                         AgregarLibro agrega = new AgregarLibro();
                                         agrega.Agregar(libros);
+                                        Console.ReadLine();
+                                        Console.Clear();
                                         break;
                                     case "2":
                                         EliminarLibro elimina = new EliminarLibro();
                                         elimina.Eliminar(libros);
+                                        Console.ReadLine();
+                                        Console.Clear();
                                         break;
                                     case "3":
                                         EditarLibro edita = new EditarLibro();
                                         edita.Editar(libros);
+                                        Console.ReadLine();
+                                        Console.Clear();
                                         break;
                                     case "4":
                                         break;
@@ -76,9 +82,13 @@ namespace POO
                                 {
                                     case "1":
                                         retira.Retiro(libros,usuarioAIngresar,prestamos);
+                                        Console.ReadLine();
+                                        Console.Clear();
                                         break;
                                     case "2":
                                         devuelve.Devolucion(prestamos, libros,usuarioAIngresar);
+                                        Console.ReadLine();
+                                        Console.Clear();
                                         break;
                                     case"3":
                                         break;
@@ -93,6 +103,8 @@ namespace POO
                 {
 
                     ingreso.RegistarUsuario();
+                    Console.ReadLine();
+                    Console.Clear();
 
                 }
             } while (Registrado != "3");

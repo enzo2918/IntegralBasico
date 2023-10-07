@@ -11,7 +11,6 @@ namespace POO
         public void MuestraInventario(Libro[] libros)
         {
             OrdenarAlfabeticamente(libros);
-            Console.WriteLine("hola");
             for (int a = 0; a < libros.Length; a++)
             {
                 if (libros[a] !=null) Console.WriteLine(libros[a].Posicion);
@@ -23,7 +22,10 @@ namespace POO
                 {
                     if (libros[m] != null && libros[m].Posicion == n)
                     {
-                        Console.WriteLine(libros[m].Titulo);
+                        Console.WriteLine("Nombre: {0}",libros[m].Titulo);
+                        Console.WriteLine("Autor: {0}", libros[m].Autor);
+                        Console.WriteLine("Genero: {0}", libros[m].Genero);
+                        Console.WriteLine("");
                     }
                 }                                  
             }
@@ -60,7 +62,7 @@ namespace POO
                 if (prestamos[n] != null && prestamos[n].Cliente == usuario) Console.WriteLine(prestamos[n].LibroAPrestar.Titulo);
             }
         }
-        public void OrdenarAlfabeticamente(Libro[] libros)
+        private void OrdenarAlfabeticamente(Libro[] libros)
         {
             for (int a = 0; a < libros.Length; a++)
             {

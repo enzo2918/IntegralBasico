@@ -122,7 +122,7 @@ namespace POO
                     DateTime fechaDePrestamo = DateTime.Now;
                     prestamos[n] = new Prestamo(usuario, libroARetirar, fechaDePrestamo);
                     Console.WriteLine("Su pedido fue hecho exitosamente, recuerde devolver el libro {0}, antes de los siguientes 30 dias " +
-                        "a partir de la fecha {1}/{2}/{3}", libroARetirar.Titulo, fechaDePrestamo.Day,fechaDePrestamo.Month,fechaDePrestamo.Year);
+                        "a partir de la fecha {1}/{2}/{3}", libroARetirar.Titulo, fechaDePrestamo.Day,fechaDePrestamo.Month,fechaDePrestamo.Year);                    
                     break;
                 }
                 
