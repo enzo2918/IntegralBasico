@@ -81,6 +81,7 @@ namespace POO
                         {
                             if (libros[n] != libros[m])
                             {
+                                var contador = 0;
                                 for (int l = 0; l < libros[n].Titulo.Length && l < libros[m].Titulo.Length; l++)
                                 {    
                                     
@@ -89,10 +90,10 @@ namespace POO
                                         libros[n].Posicion = libros[n].Posicion + 1;
                                         break;
                                     }
-                                    if (libros[n].Titulo[l] < libros[m].Titulo[l]) break;
-                                                                       
-                                }                               
-                                
+                                    else if (libros[n].Titulo[l] < libros[m].Titulo[l]) break;
+                                    contador++;                                    
+                                }
+                                if (contador == libros[m].Titulo.Length) libros[n].Posicion++;
                             }
                         }
                         
