@@ -48,7 +48,17 @@
     <Compile Include="DevolucionLibro.cs" />
     <Compile Include="EditarLibro.cs" />
     <Compile Include="EliminarLibro.cs" />
+    <Compile Include="IAgregarLibro.cs" />
+    <Compile Include="IBuscador.cs" />
+    <Compile Include="IDevolucionLibro.cs" />
+    <Compile Include="IEditarLibro.cs" />
+    <Compile Include="IEliminarLibro.cs" />
+    <Compile Include="IIngreso.cs" />
+    <Compile Include="IMuestra.cs" />
     <Compile Include="Inicio.cs" />
+    <Compile Include="Instanciadora.cs" />
+    <Compile Include="IRetiroLibro.cs" />
+    <Compile Include="IPedir.cs" />
     <Compile Include="Muestra.cs" />
     <Compile Include="LIbro.cs" />
     <Compile Include="Pedir.cs" />

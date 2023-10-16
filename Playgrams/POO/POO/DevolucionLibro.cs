@@ -6,11 +6,16 @@ using System.Threading.Tasks;
 
 namespace POO
 {
-    internal class DevolucionLibro
+    internal class DevolucionLibro:IDevolucionLibro
     {
-        Muestra muestra = new Muestra();
-        Pedir pedir = new Pedir();
+        IMuestra muestra;
+        IPedir pedir;
         
+        public DevolucionLibro(IMuestra muestraParametro, IPedir pedirParamtro) 
+        {
+            muestra = muestraParametro;
+            pedir = pedirParamtro;
+        }
         public void Devolucion(Prestamo[] prestamos, Libro[] libros,Usuario usuario)
         {
             Console.WriteLine("Cual libro quieres devolver?");

@@ -6,15 +6,22 @@ using System.Threading.Tasks;
 
 namespace POO
 {
-    internal class EditarLibro
+    internal class EditarLibro:IEditarLibro
     {
-        Buscador buscador = new Buscador();
-        Muestra inventario = new Muestra();
-        Pedir pedir = new Pedir();
+        IBuscador buscador;
+        IMuestra muestra;
+        IPedir pedir;
+
+        public EditarLibro(IBuscador buscadorParametro, IMuestra muestraParametro, IPedir pedirParametro) 
+        {
+            buscador = buscadorParametro;
+            muestra = muestraParametro;
+            pedir = pedirParametro;
+        }
         public void Editar(Libro[] libros) 
         {
             Console.WriteLine("Que libro deseas editar?");
-            inventario.MuestraInventario(libros);
+            muestra.MuestraInventario(libros);
             var libroAEditar = pedir.PedirCadena();
 
             Editarlo(libroAEditar.ToLower(),libros);

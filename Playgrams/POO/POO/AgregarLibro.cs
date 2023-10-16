@@ -6,10 +6,15 @@ using System.Threading.Tasks;
 
 namespace POO
 {
-    internal class AgregarLibro
+    internal class AgregarLibro:IAgregarLibro
     {        
-        Pedir pedir = new Pedir();
-        Buscador buscador = new Buscador();
+        IPedir pedir;
+        IBuscador buscador;
+        public AgregarLibro(IPedir pedirParametro, IBuscador buscadorParametro) 
+        {
+            pedir = pedirParametro;
+            buscador = buscadorParametro;
+        }
         public void Agregar(Libro[] libros)
         {
             Console.WriteLine("Cual es el titulo del libro?");

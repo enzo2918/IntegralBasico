@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace POO
 {
-    internal class Buscador
+    internal class Buscador:IBuscador
     {
         public Libro BuscarLibro(string libroABuscar, Libro[] libros)
         {

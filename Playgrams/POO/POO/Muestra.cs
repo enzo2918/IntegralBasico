@@ -6,16 +6,12 @@ using System.Threading.Tasks;
 
 namespace POO
 {
-    internal class Muestra
+    internal class Muestra:IMuestra
     {
         public void MuestraInventario(Libro[] libros)
         {
             OrdenarAlfabeticamente(libros);
-            for (int a = 0; a < libros.Length; a++)
-            {
-                if (libros[a] !=null) Console.WriteLine(libros[a].Posicion);
 
-            }
             for (int n = 0; n < libros.Length; n++)
             {               
                 for (int m = 0; m < libros.Length; m++)

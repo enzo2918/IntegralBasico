@@ -10,15 +10,16 @@ using System.Threading.Tasks;
 
 namespace POO
 {
-    internal class Ingreso
+    internal class Ingreso:IIngreso
     {
-        
-        Pedir pedir = new Pedir();
+
+        IPedir pedir;
         Usuario[] usuarios;
 
-        public Ingreso(Usuario[] usuariosParametro)
+        public Ingreso(Usuario[] usuariosParametro,IPedir pedirParametro)
         {
             usuarios = usuariosParametro;
+            pedir = pedirParametro;
         }
 
         public Usuario IniciarSesion()

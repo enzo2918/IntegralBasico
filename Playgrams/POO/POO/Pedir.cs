@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace POO
 {
-    internal class Pedir
+    internal class Pedir:IPedir
     {
         private string dato = "";
         private int seleccion = 0;

@@ -6,15 +6,20 @@ using System.Threading.Tasks;
 
 namespace POO
 {
-    internal class EliminarLibro
+    internal class EliminarLibro:IEliminarLibro
     {
-        Muestra inventario = new Muestra();
-        Pedir pedir = new Pedir();
+        IMuestra muestra;
+        IPedir pedir;
+        public EliminarLibro(IMuestra muestraParametro, IPedir pedirParametro)
+        {
+            muestra = muestraParametro;
+            pedir = pedirParametro;
+        }
         public void Eliminar(Libro[] libros)
         {
             Console.WriteLine("Que libro deseas eliminar?");
 
-            inventario.MuestraInventario(libros);
+            muestra.MuestraInventario(libros);
             var eleccion = pedir.PedirCadena();
 
             Eliminarlo(eleccion.ToLower(), libros);

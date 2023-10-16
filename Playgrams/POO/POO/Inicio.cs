@@ -16,11 +16,20 @@ namespace POO
             Libro[] libros = new Libro[10];
             Prestamo[] prestamos = new Prestamo[50];
 
-            Pedir pedir = new Pedir();
-
-            var usuarioAdministrador = new Usuario("Enzo Ortiz", "x", "x", true);
+            Usuario usuarioAdministrador = new Usuario("Enzo Ortiz", "x", "x", true);
             usuarios[0] = usuarioAdministrador;
-            Ingreso ingreso = new Ingreso(usuarios);
+
+            IBuscador buscador = new Buscador();
+            IPedir pedir = new Pedir();
+            IMuestra muestra = new Muestra();
+
+            IAgregarLibro agrega = new AgregarLibro(pedir,buscador);            
+            IDevolucionLibro devuelve = new DevolucionLibro(muestra,pedir);
+            IEditarLibro edita = new EditarLibro(buscador,muestra,pedir);
+            IEliminarLibro elimina = new EliminarLibro(muestra, pedir);
+            IIngreso ingreso = new Ingreso(usuarios, pedir);           
+            IRetiroLibro retira = new RetiroLibro(buscador,muestra,pedir);
+            
 
             string Registrado = "";
             do
@@ -45,19 +54,16 @@ namespace POO
                                 switch (eleccion)
                                 {
                                     case "1":
-                                        AgregarLibro agrega = new AgregarLibro();
                                         agrega.Agregar(libros);
                                         Console.ReadLine();
                                         Console.Clear();
                                         break;
                                     case "2":
-                                        EliminarLibro elimina = new EliminarLibro();
                                         elimina.Eliminar(libros);
                                         Console.ReadLine();
                                         Console.Clear();
                                         break;
                                     case "3":
-                                        EditarLibro edita = new EditarLibro();
                                         edita.Editar(libros);
                                         Console.ReadLine();
                                         Console.Clear();
@@ -76,8 +82,7 @@ namespace POO
                             {
                                 Console.WriteLine("1. Pedir libro\n2. Devolver libro\n3. Salir");
                                 eleccion = pedir.PedirCadena();
-                                DevolucionLibro devuelve = new DevolucionLibro();
-                                RetiroLibro retira = new RetiroLibro();
+
                                 switch (eleccion)
                                 {
                                     case "1":

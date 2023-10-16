@@ -6,11 +6,17 @@ using System.Threading.Tasks;
 
 namespace POO
 {
-    internal class RetiroLibro
+    internal class RetiroLibro:IRetiroLibro
     {
-        Buscador buscador = new Buscador();
-        Muestra muestra = new Muestra();
-        Pedir pedir = new Pedir();
+        IBuscador buscador = new Buscador();
+        IMuestra muestra = new Muestra();
+        IPedir pedir = new Pedir();
+        public RetiroLibro(IBuscador buscadorParametro,IMuestra muestraParametro, IPedir pedirParametro)
+        {
+            buscador = buscadorParametro;
+            muestra = muestraParametro;
+            pedir = pedirParametro;
+        }
         public void Retiro(Libro[] libros,Usuario usuario, Prestamo[] prestamos)
         {
             
