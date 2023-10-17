@@ -54,6 +54,7 @@
     <Compile Include="IEditarLibro.cs" />
     <Compile Include="IEliminarLibro.cs" />
     <Compile Include="IIngreso.cs" />
+    <Compile Include="IInicio.cs" />
     <Compile Include="IMuestra.cs" />
     <Compile Include="Inicio.cs" />
     <Compile Include="Instanciadora.cs" />

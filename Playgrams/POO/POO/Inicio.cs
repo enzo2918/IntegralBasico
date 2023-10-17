@@ -6,30 +6,39 @@ using System.Threading.Tasks;
 
 namespace POO
 {
-    internal class Inicio
+    internal class Inicio:IInicio
     {
-        
+        Usuario[] usuarios;
+        Libro[] libros;
+        Prestamo[] prestamos;
+
+        IPedir pedir;
+        IAgregarLibro agrega;
+        IDevolucionLibro devuelve;
+        IEditarLibro edita;
+        IEliminarLibro elimina;
+        IIngreso ingreso;
+        IRetiroLibro retira;
+
+        public Inicio(Usuario[] usuariosP, Libro[] librosP,Prestamo[] prestamosP, IPedir pedirP, IAgregarLibro agregaP, IDevolucionLibro devuelveP,
+            IEditarLibro editaP, IEliminarLibro eliminaP, IIngreso ingresoP, IRetiroLibro retiraP) 
+        { 
+            usuarios = usuariosP;
+            libros = librosP;
+            prestamos = prestamosP;
+
+            pedir = pedirP;
+            agrega = agregaP;
+            devuelve = devuelveP;
+            edita = editaP;
+            elimina = eliminaP;
+            ingreso = ingresoP;
+            retira = retiraP;
+
+        }
         public void Iniciar ()
         {
 
-            Usuario[] usuarios = new Usuario[5];
-            Libro[] libros = new Libro[10];
-            Prestamo[] prestamos = new Prestamo[50];
-
-            Usuario usuarioAdministrador = new Usuario("Enzo Ortiz", "x", "x", true);
-            usuarios[0] = usuarioAdministrador;
-
-            IBuscador buscador = new Buscador();
-            IPedir pedir = new Pedir();
-            IMuestra muestra = new Muestra();
-
-            IAgregarLibro agrega = new AgregarLibro(pedir,buscador);            
-            IDevolucionLibro devuelve = new DevolucionLibro(muestra,pedir);
-            IEditarLibro edita = new EditarLibro(buscador,muestra,pedir);
-            IEliminarLibro elimina = new EliminarLibro(muestra, pedir);
-            IIngreso ingreso = new Ingreso(usuarios, pedir);           
-            IRetiroLibro retira = new RetiroLibro(buscador,muestra,pedir);
-            
 
             string Registrado = "";
             do

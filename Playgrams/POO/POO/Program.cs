@@ -11,8 +11,24 @@ namespace POO
     {
         static void Main(string[] args)
         {
-            var inicio = new Inicio();
+            
+            var instanciadora = new Instanciadora();
+            instanciadora.Instanciar();
+
+            IInicio inicio = instanciadora.ObtenerInstanciaInicio();
             inicio.Iniciar();
+
+
+
+
+
+
+
+
+
+
+
+
 
             
             //var numbers = new string[10]; 
