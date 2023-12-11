@@ -8,6 +8,6 @@ namespace POO
 {
     internal interface IAgregarLibro
     {
-        void Agregar(Libro[] libros);
+        void Agregar(List<Libro> libros);
     }
 }

@@ -8,6 +8,6 @@ namespace POO
 {
     internal interface IDevolucionLibro
     {
-        void Devolucion(Prestamo[] prestamos, Libro[] libros, Usuario usuario);
+        void Devolucion(List<Prestamo> prestamos, List<Libro> libros, Usuario usuario);
     }
 }

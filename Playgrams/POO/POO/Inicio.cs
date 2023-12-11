@@ -8,9 +8,9 @@ namespace POO
 {
     internal class Inicio:IInicio
     {
-        Usuario[] usuarios;
-        Libro[] libros;
-        Prestamo[] prestamos;
+        List<Usuario> usuarios;
+        List<Libro> libros;
+        List<Prestamo> prestamos;
 
         IPedir pedir;
         IAgregarLibro agrega;
@@ -20,7 +20,7 @@ namespace POO
         IIngreso ingreso;
         IRetiroLibro retira;
 
-        public Inicio(Usuario[] usuariosP, Libro[] librosP,Prestamo[] prestamosP, IPedir pedirP, IAgregarLibro agregaP, IDevolucionLibro devuelveP,
+        public Inicio(List<Usuario> usuariosP, List<Libro> librosP,List<Prestamo> prestamosP, IPedir pedirP, IAgregarLibro agregaP, IDevolucionLibro devuelveP,
             IEditarLibro editaP, IEliminarLibro eliminaP, IIngreso ingresoP, IRetiroLibro retiraP) 
         { 
             usuarios = usuariosP;
@@ -39,8 +39,7 @@ namespace POO
         public void Iniciar ()
         {
 
-
-            string Registrado = "";
+            string Registrado;
             do
             {
                 Console.WriteLine("Bienvenido a la biblioteca");
@@ -86,7 +85,7 @@ namespace POO
                         }
                         else
                         {
-                            var eleccion = "";
+                            string eleccion;
                             do
                             {
                                 Console.WriteLine("1. Pedir libro\n2. Devolver libro\n3. Salir");

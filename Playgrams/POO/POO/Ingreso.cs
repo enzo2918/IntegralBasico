@@ -14,9 +14,9 @@ namespace POO
     {
 
         IPedir pedir;
-        Usuario[] usuarios;
+        List<Usuario> usuarios;
 
-        public Ingreso(Usuario[] usuariosParametro,IPedir pedirParametro)
+        public Ingreso(List<Usuario> usuariosParametro,IPedir pedirParametro)
         {
             usuarios = usuariosParametro;
             pedir = pedirParametro;
@@ -27,7 +27,8 @@ namespace POO
             Console.WriteLine("Escribe tu nombre de usuario");
             var nombreUsuario = pedir.PedirCadena();
 
-            var usuario = BuscarUsuario(nombreUsuario);
+            var usuario = usuarios.FirstOrDefault(p => nombreUsuario == p.NombreUsuario);
+            //var usuario = BuscarUsuario(nombreUsuario);
 
             if (usuario == null)
             {
@@ -55,7 +56,8 @@ namespace POO
             Console.WriteLine("Crea un usuario");
             var nombreUsuario = pedir.PedirCadena();
 
-            var usuarioYaExiste = BuscarUsuario(nombreUsuario);
+            var usuarioYaExiste = usuarios.FirstOrDefault(p => nombreUsuario == p.NombreUsuario);
+            //var usuarioYaExiste = BuscarUsuario(nombreUsuario);
 
             if (usuarioYaExiste!=null)
             {
@@ -66,35 +68,30 @@ namespace POO
             Console.WriteLine("Crea una contraseña");
             var contraseña = pedir.PedirCadena();
 
-            Registrar(nombreCompleto, nombreUsuario, contraseña, false);
+            Registrar(nombreCompleto, nombreUsuario, contraseña);
         }
        
-        private void Registrar(string nombreCompleto, string nombreUsuario, string contraseña,bool esAdministrador)
+        private void Registrar(string nombreCompleto, string nombreUsuario, string contraseña)
         {
-            for (int n = 0; n < usuarios.Length; ++n)
-            {
-                if (usuarios[n] == null)
-                {
-                    usuarios[n] = new Usuario(nombreCompleto, nombreUsuario, contraseña, false);
-                    break;
-                }
-            }
+            usuarios.Add(new Usuario(nombreCompleto, nombreUsuario, contraseña, false));
         }
-        private Usuario BuscarUsuario(string nombreUsuario)
-        {
-            Usuario usuarioADevolver = null;
-            for (int n = 0; n < usuarios.Length; n++)
-            {
-                if (usuarios[n] != null)
-                {
-                    if (nombreUsuario == usuarios[n].NombreUsuario)
-                    {
-                        usuarioADevolver = usuarios[n];
-                        break;
-                    }
-                }
-            }
-            return usuarioADevolver;
-        }
+
+        //private Usuario BuscarUsuario(string nombreUsuario)
+        //{
+        //    Usuario usuarioADevolver = null;
+
+        //    for (int n = 0; n < usuarios.Count; n++)
+        //    {
+        //        if (usuarios[n] != null)
+        //        {
+        //            if (nombreUsuario == usuarios[n].NombreUsuario)
+        //            {
+        //                usuarioADevolver = usuarios[n];
+        //                break;
+        //            }
+        //        }
+        //    }
+        //    return usuarioADevolver;
+        //}
     }
 }

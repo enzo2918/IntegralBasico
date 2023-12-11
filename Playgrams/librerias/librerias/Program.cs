@@ -4,10 +4,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace POO
+namespace librerias
 {
-    internal interface IEliminarLibro
+    internal class Program
     {
-        void Eliminar(List<Libro> libros);
+        static void Main(string[] args)
+        {
+        }
     }
 }

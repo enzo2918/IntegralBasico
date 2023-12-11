@@ -11,12 +11,12 @@ namespace POO
         IInicio inicio;
         public void Instanciar()
         {
-            Usuario[] usuarios = new Usuario[5];
-            Libro[] libros = new Libro[10];
-            Prestamo[] prestamos = new Prestamo[50];
+            var usuarios = new List<Usuario>();
+            var libros = new List<Libro>();
+            var prestamos = new List<Prestamo>();
 
             Usuario usuarioAdministrador = new Usuario("Enzo Ortiz", "x", "x", true);
-            usuarios[0] = usuarioAdministrador;
+            usuarios.Insert(0, usuarioAdministrador);
 
             IBuscador buscador = new Buscador();
             IPedir pedir = new Pedir();

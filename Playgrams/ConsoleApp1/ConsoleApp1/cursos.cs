@@ -4,10 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace POO
+namespace ConsoleApp1
 {
-    internal interface IEliminarLibro
+    internal class cursos
     {
-        void Eliminar(List<Libro> libros);
+        public cursos() { }
     }
 }

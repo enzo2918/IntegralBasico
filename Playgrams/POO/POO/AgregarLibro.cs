@@ -15,7 +15,7 @@ namespace POO
             pedir = pedirParametro;
             buscador = buscadorParametro;
         }
-        public void Agregar(Libro[] libros)
+        public void Agregar(List<Libro> libros)
         {
             Console.WriteLine("Cual es el titulo del libro?");
             var titulo = pedir.PedirCadena();
@@ -59,16 +59,18 @@ namespace POO
 
             return genero;
         }
-        private void Crearlo(string titulo, string autor, string genero, Libro[] libros)
+        private void Crearlo(string titulo, string autor, string genero, List<Libro> libros)
         {
-            for (int n = 0; n < libros.Length; n++)
-            {
-                if (libros[n] == null)
-                {
-                    libros[n] = new Libro(titulo.ToLower(), autor.ToLower(), genero.ToLower());
-                    break;
-                }
-            }
+            libros.Add(new Libro(titulo.ToLower(), autor.ToLower(), genero.ToLower()));
+
+            //for (int n = 0; n < libros.Count; n++)
+            //{
+            //    if (libros[n] == null)
+            //    {
+            //        libros[n] = new Libro(titulo.ToLower(), autor.ToLower(), genero.ToLower());
+            //        break;
+            //    }
+            //}
         }
         
     }

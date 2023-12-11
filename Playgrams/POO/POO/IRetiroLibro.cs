@@ -8,6 +8,6 @@ namespace POO
 {
     internal interface IRetiroLibro
     {
-        void Retiro(Libro[] libros, Usuario usuario, Prestamo[] prestamos);
+        void Retiro(List<Libro> libros, Usuario usuario, List<Prestamo> prestamos);
     }
 }

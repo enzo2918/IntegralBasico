@@ -18,7 +18,7 @@ namespace POO
             muestra = muestraParametro;
             pedir = pedirParametro;
         }
-        public void Editar(Libro[] libros) 
+        public void Editar(List<Libro> libros) 
         {
             Console.WriteLine("Que libro deseas editar?");
             muestra.MuestraInventario(libros);
@@ -26,7 +26,7 @@ namespace POO
 
             Editarlo(libroAEditar.ToLower(),libros);
         }
-        private void Editarlo(string libroAEditar, Libro[] libros)
+        private void Editarlo(string libroAEditar, List<Libro> libros)
         {
             var libro = buscador.BuscarLibro(libroAEditar, libros);
 
