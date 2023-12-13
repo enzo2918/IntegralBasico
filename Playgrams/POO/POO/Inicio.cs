@@ -8,7 +8,6 @@ namespace POO
 {
     internal class Inicio:IInicio
     {
-        List<Usuario> usuarios;
         List<Libro> libros;
         List<Prestamo> prestamos;
 
@@ -20,10 +19,9 @@ namespace POO
         IIngreso ingreso;
         IRetiroLibro retira;
 
-        public Inicio(List<Usuario> usuariosP, List<Libro> librosP,List<Prestamo> prestamosP, IPedir pedirP, IAgregarLibro agregaP, IDevolucionLibro devuelveP,
+        public Inicio(List<Libro> librosP,List<Prestamo> prestamosP, IPedir pedirP, IAgregarLibro agregaP, IDevolucionLibro devuelveP,
             IEditarLibro editaP, IEliminarLibro eliminaP, IIngreso ingresoP, IRetiroLibro retiraP) 
         { 
-            usuarios = usuariosP;
             libros = librosP;
             prestamos = prestamosP;
 
@@ -62,7 +60,7 @@ namespace POO
                                 switch (eleccion)
                                 {
                                     case "1":
-                                        agrega.Agregar(libros);
+                                        agrega.Agregar();
                                         Console.ReadLine();
                                         Console.Clear();
                                         break;
@@ -94,12 +92,12 @@ namespace POO
                                 switch (eleccion)
                                 {
                                     case "1":
-                                        retira.Retiro(libros,usuarioAIngresar,prestamos);
+                                        retira.Retiro(libros,usuarioAIngresar);
                                         Console.ReadLine();
                                         Console.Clear();
                                         break;
                                     case "2":
-                                        devuelve.Devolucion(prestamos, libros,usuarioAIngresar);
+                                        devuelve.Devolucion(prestamos,usuarioAIngresar);
                                         Console.ReadLine();
                                         Console.Clear();
                                         break;

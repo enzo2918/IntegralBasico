@@ -58,6 +58,9 @@
     <Compile Include="IMuestra.cs" />
     <Compile Include="Inicio.cs" />
     <Compile Include="Instanciadora.cs" />
+    <Compile Include="IRepoLibro.cs" />
+    <Compile Include="IRepoPrestamo.cs" />
+    <Compile Include="IRepoUsuario.cs" />
     <Compile Include="IRetiroLibro.cs" />
     <Compile Include="IPedir.cs" />
     <Compile Include="Muestra.cs" />
@@ -67,6 +70,9 @@
     <Compile Include="Prestamo.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="RepoLibro.cs" />
+    <Compile Include="RepoPrestamo.cs" />
+    <Compile Include="RepoUsuario.cs" />
     <Compile Include="RetiroLibro.cs" />
     <Compile Include="Usuario.cs" />
   </ItemGroup>

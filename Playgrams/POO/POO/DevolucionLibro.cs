@@ -6,46 +6,55 @@ using System.Threading.Tasks;
 
 namespace POO
 {
-    internal class DevolucionLibro:IDevolucionLibro
+    internal class DevolucionLibro : IDevolucionLibro
     {
         IMuestra muestra;
         IPedir pedir;
-        
-        public DevolucionLibro(IMuestra muestraParametro, IPedir pedirParamtro) 
+        IRepoPrestamo repoPrestamo;
+        IRepoLibro repoLibro;
+
+        public DevolucionLibro(IMuestra muestraParametro, IPedir pedirParamtro, IRepoPrestamo RepoPrestamo, IRepoLibro RepoLibro)
         {
             muestra = muestraParametro;
             pedir = pedirParamtro;
+            repoPrestamo = RepoPrestamo;
+            repoLibro = RepoLibro;
         }
-        public void Devolucion(List<Prestamo> prestamos, List<Libro> libros,Usuario usuario)
+        public void Devolucion(List<Prestamo> prestamos, Usuario usuario)
         {
             Console.WriteLine("Cual libro quieres devolver?");
-            muestra.MuestraLibrosPrestados(prestamos,usuario);
+            muestra.MuestraLibrosPrestados(prestamos, usuario);
             var tituloLibroADevolver = pedir.PedirCadena();
 
-            Devolver(tituloLibroADevolver, libros, prestamos,usuario);
+
+            var libroADevolver = repoLibro.BuscarLibro(tituloLibroADevolver);
+
+            Devolver(libroADevolver, usuario);
 
         }
-        private void Devolver(string tituloLibroADevolver, List<Libro> libros, List<Prestamo> prestamos, Usuario usuario)
-        {
-            Buscador buscador = new Buscador();
-            var libroADevolver = buscador.BuscarLibro(tituloLibroADevolver, libros);
 
-            if (libroADevolver == null) 
+
+
+        private void Devolver(Libro libroADevolver, Usuario usuario)
+        {
+
+            if (libroADevolver == null)
             {
                 Console.WriteLine("No se encuentra el libro proporcionado");
             }
-            else 
+            else
             {
-                var prestamo = prestamos.FirstOrDefault(p => libroADevolver == p.LibroAPrestar && p.Cliente == usuario);
-                if (prestamo != null) 
+                var prestamo = repoPrestamo.BuscarPrestamo(libroADevolver, usuario);
+
+                if (prestamo != null)
                 {
-                    var devolucion = prestamos.Remove(prestamo);
+                    repoPrestamo.Devolver(prestamo);
                     Console.WriteLine("Gracias por su devolucion");
                 }
                 else Console.WriteLine("Este libro no se encuentra en su posesion");
             }
 
-           
+
 
 
             //for (int n = 0; n < prestamos.Count; n++)
@@ -61,6 +70,7 @@ namespace POO
             //    }
             //}
 
+            //}
         }
     }
 }

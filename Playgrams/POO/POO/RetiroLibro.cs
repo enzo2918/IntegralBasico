@@ -8,19 +8,20 @@ namespace POO
 {
     internal class RetiroLibro:IRetiroLibro
     {
-        IBuscador buscador = new Buscador();
-        IMuestra muestra = new Muestra();
-        IPedir pedir = new Pedir();
-        public RetiroLibro(IBuscador buscadorParametro,IMuestra muestraParametro, IPedir pedirParametro)
+        IMuestra muestra;
+        IPedir pedir;
+        IRepoLibro repoLibro;
+        IRepoPrestamo repoPrestamo;
+        public RetiroLibro(IMuestra muestraParametro, IPedir pedirParametro, IRepoLibro RepoLibro,IRepoPrestamo RepoPrestamo)
         {
-            buscador = buscadorParametro;
             muestra = muestraParametro;
             pedir = pedirParametro;
+            repoLibro = RepoLibro;
+            repoPrestamo  = RepoPrestamo;
         }
-        public void Retiro(List<Libro> libros,Usuario usuario, List<Prestamo> prestamos)
+        public void Retiro(List<Libro> libros,Usuario usuario)
         {
-            
-            Libro libroARetirar = null;
+            Libro libroARetirar;
             string categoria;
             string titulo = "";
 
@@ -48,14 +49,14 @@ namespace POO
                     break;
 
             }
-            libroARetirar = Retirar(titulo, libros);
+            libroARetirar = Retirar(titulo);
 
             if (libroARetirar != null)
             {
-                var libroYaRetirado = LibroYaRetirado(libroARetirar, prestamos,usuario);
+                var libroYaRetirado = LibroYaRetirado(libroARetirar,usuario);
                 if (libroYaRetirado== "YaPrestadoAOtro") Console.WriteLine("Este libro se encuentra en posesion de otra persona"); 
                 else if (libroYaRetirado == "YaPrestado") Console.WriteLine("Este libro ya se encuentra en tu posesion");
-                else PrestarLibro(usuario,libroARetirar,prestamos);
+                else Prestarlo(usuario,libroARetirar);
             }
 
         }
@@ -93,9 +94,9 @@ namespace POO
             return titulo;
             
         }
-        private Libro Retirar(string titulo, List<Libro> libros)
+        private Libro Retirar(string titulo)
         {
-            var libroARetirar = buscador.BuscarLibro(titulo, libros);
+            var libroARetirar = repoLibro.BuscarLibro(titulo);
             if (libroARetirar != null) return libroARetirar;
             else
             {
@@ -103,9 +104,9 @@ namespace POO
                 return null;
             }
         }
-        private string LibroYaRetirado(Libro libroARetirar, List<Prestamo> prestamos,Usuario usuario)
+        private string LibroYaRetirado(Libro libroARetirar,Usuario usuario)
         {
-            var Prestamo = prestamos.FirstOrDefault(p => p.LibroAPrestar == libroARetirar);
+            var Prestamo = repoPrestamo.LibroYaPrestado(libroARetirar);
             if (Prestamo != null)
             {
                 if (Prestamo.Cliente != usuario) return "YaPrestadoAOtro";
@@ -128,10 +129,10 @@ namespace POO
             //return"Disponible";
         }
         
-        private void PrestarLibro(Usuario usuario,Libro libroARetirar, List<Prestamo> prestamos)
+        private void Prestarlo(Usuario usuario,Libro libroARetirar)
         {
             DateTime fechaDePrestamo = DateTime.Now;
-            prestamos.Add(new Prestamo(usuario, libroARetirar, fechaDePrestamo));
+            repoPrestamo.PrestarLibro(usuario, libroARetirar, fechaDePrestamo);
             Console.WriteLine("Su pedido fue hecho exitosamente, recuerde devolver el libro {0}, antes de los siguientes 30 dias " +
                         "a partir de la fecha {1}/{2}/{3}", libroARetirar.Titulo, fechaDePrestamo.Day, fechaDePrestamo.Month, fechaDePrestamo.Year);
 

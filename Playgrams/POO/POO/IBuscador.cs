@@ -8,7 +8,7 @@ namespace POO
 {
     internal interface IBuscador
     {
-        Libro BuscarLibro(string libroABuscar, List<Libro> libros);
-        bool LibroExistente(string titulo, List<Libro> libros);
+        //Libro BuscarLibro(string libroABuscar, List<Libro> libros);
+        //bool LibroExistente(string titulo, List<Libro> libros);
     }
 }

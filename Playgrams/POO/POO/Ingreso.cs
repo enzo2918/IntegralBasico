@@ -14,12 +14,12 @@ namespace POO
     {
 
         IPedir pedir;
-        List<Usuario> usuarios;
+        IRepoUsuario repoUsuario;
 
-        public Ingreso(List<Usuario> usuariosParametro,IPedir pedirParametro)
+        public Ingreso(IPedir pedirParametro,IRepoUsuario RepoUsuario)
         {
-            usuarios = usuariosParametro;
             pedir = pedirParametro;
+            repoUsuario = RepoUsuario;
         }
 
         public Usuario IniciarSesion()
@@ -27,7 +27,9 @@ namespace POO
             Console.WriteLine("Escribe tu nombre de usuario");
             var nombreUsuario = pedir.PedirCadena();
 
-            var usuario = usuarios.FirstOrDefault(p => nombreUsuario == p.NombreUsuario);
+            var usuario = repoUsuario.BuscarUsuario(nombreUsuario);
+
+            //var usuario = usuarios.FirstOrDefault(p => nombreUsuario == p.NombreUsuario);
             //var usuario = BuscarUsuario(nombreUsuario);
 
             if (usuario == null)
@@ -39,7 +41,10 @@ namespace POO
             Console.WriteLine("Escribe tu contraseña");
             var contraseña = pedir.PedirCadena();
 
-            var contraseñaEsCorrecta = usuario.Contraseña == contraseña;
+            var contraseñaEsCorrecta = repoUsuario.ContraseñaCorrecta(contraseña, usuario);
+
+            //var contraseñaEsCorrecta = usuario.Contraseña == contraseña;
+
             if (!contraseñaEsCorrecta)
             {
                 Console.WriteLine("Su contraseña es incorrecta");
@@ -56,7 +61,7 @@ namespace POO
             Console.WriteLine("Crea un usuario");
             var nombreUsuario = pedir.PedirCadena();
 
-            var usuarioYaExiste = usuarios.FirstOrDefault(p => nombreUsuario == p.NombreUsuario);
+            var usuarioYaExiste = repoUsuario.BuscarUsuario(nombreUsuario);
             //var usuarioYaExiste = BuscarUsuario(nombreUsuario);
 
             if (usuarioYaExiste!=null)
@@ -68,13 +73,13 @@ namespace POO
             Console.WriteLine("Crea una contraseña");
             var contraseña = pedir.PedirCadena();
 
-            Registrar(nombreCompleto, nombreUsuario, contraseña);
+            repoUsuario.Registrar(nombreCompleto, nombreUsuario, contraseña);
         }
        
-        private void Registrar(string nombreCompleto, string nombreUsuario, string contraseña)
-        {
-            usuarios.Add(new Usuario(nombreCompleto, nombreUsuario, contraseña, false));
-        }
+        //private void Registrar(string nombreCompleto, string nombreUsuario, string contraseña)
+        //{
+        //    usuarios.Add(new Usuario(nombreCompleto, nombreUsuario, contraseña, false));
+        //}
 
         //private Usuario BuscarUsuario(string nombreUsuario)
         //{

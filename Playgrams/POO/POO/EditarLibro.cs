@@ -8,15 +8,16 @@ namespace POO
 {
     internal class EditarLibro:IEditarLibro
     {
-        IBuscador buscador;
         IMuestra muestra;
         IPedir pedir;
+        IRepoLibro repoLibro;
 
-        public EditarLibro(IBuscador buscadorParametro, IMuestra muestraParametro, IPedir pedirParametro) 
+        public EditarLibro(IMuestra muestraParametro, IPedir pedirParametro, IRepoLibro RepoLibro) 
         {
-            buscador = buscadorParametro;
             muestra = muestraParametro;
             pedir = pedirParametro;
+            repoLibro = RepoLibro;
+
         }
         public void Editar(List<Libro> libros) 
         {
@@ -24,11 +25,11 @@ namespace POO
             muestra.MuestraInventario(libros);
             var libroAEditar = pedir.PedirCadena();
 
-            Editarlo(libroAEditar.ToLower(),libros);
+            Editarlo(libroAEditar.ToLower());
         }
-        private void Editarlo(string libroAEditar, List<Libro> libros)
+        private void Editarlo(string libroAEditar)
         {
-            var libro = buscador.BuscarLibro(libroAEditar, libros);
+            var libro = repoLibro.BuscarLibro(libroAEditar);
 
             if (libro != null)
             {
@@ -39,26 +40,30 @@ namespace POO
                 {
                     Console.WriteLine("Cual es el nuevo Titulo?");
                     var nuevoTitulo = pedir.PedirCadena();
-                    var libroYaExiste = buscador.LibroExistente(nuevoTitulo, libros);
+                    var libroYaExiste = repoLibro.LibroExistente(nuevoTitulo);
                     if (libroYaExiste)
                     {
                         Console.WriteLine("Este tiutlo ya existe");
                         return;
                     }
-                    libro.Titulo = nuevoTitulo;
+
+                    repoLibro.EditarTitulo(libro, nuevoTitulo);
+
                 }
                 else if (eleccion == "2" || eleccion.ToLower() == "autor")
                 {
                     Console.WriteLine("Cual es el nuevo Autor?");
                     var nuevoAutor = pedir.PedirCadena();
-                    libro.Autor = nuevoAutor;
+                    repoLibro.EditarAutor(libro, nuevoAutor);
+
 
                 }
                 else if (eleccion == "3" || eleccion.ToLower() == "genero")
                 {
                     Console.WriteLine("Cual es el nuevo Genero?");
                     var nuevoGenero = pedir.PedirCadena();
-                    libro.Genero = nuevoGenero;
+                    repoLibro.EditarGenero(libro, nuevoGenero);
+
                 }
                 else Console.WriteLine("Su seleccion es incorrecta");
             }

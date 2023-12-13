@@ -9,18 +9,19 @@ namespace POO
     internal class AgregarLibro:IAgregarLibro
     {        
         IPedir pedir;
-        IBuscador buscador;
-        public AgregarLibro(IPedir pedirParametro, IBuscador buscadorParametro) 
+        IRepoLibro repoLibro;
+        
+        public AgregarLibro(IPedir pedirParametro, IRepoLibro repoLibroParametro) 
         {
             pedir = pedirParametro;
-            buscador = buscadorParametro;
+            repoLibro = repoLibroParametro;
         }
-        public void Agregar(List<Libro> libros)
+        public void Agregar()
         {
             Console.WriteLine("Cual es el titulo del libro?");
             var titulo = pedir.PedirCadena();
 
-            var libroYaExiste = buscador.LibroExistente(titulo,libros);
+            var libroYaExiste = repoLibro.LibroExistente(titulo);
             if (libroYaExiste)
             {
                 Console.WriteLine("Este titulo ya existe");
@@ -36,7 +37,7 @@ namespace POO
             var genero = PedirGenero();
             
 
-            Crearlo(titulo, autor, genero, libros);
+            repoLibro.Crearlo(titulo, autor, genero);
 
             
         }
@@ -59,9 +60,9 @@ namespace POO
 
             return genero;
         }
-        private void Crearlo(string titulo, string autor, string genero, List<Libro> libros)
-        {
-            libros.Add(new Libro(titulo.ToLower(), autor.ToLower(), genero.ToLower()));
+        //private void Crearlo(string titulo, string autor, string genero, List<Libro> libros)
+        //{
+        //    libros.Add(new Libro(titulo.ToLower(), autor.ToLower(), genero.ToLower()));
 
             //for (int n = 0; n < libros.Count; n++)
             //{
@@ -71,7 +72,7 @@ namespace POO
             //        break;
             //    }
             //}
-        }
+        //}
         
     }
 }
