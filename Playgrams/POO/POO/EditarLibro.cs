@@ -12,57 +12,62 @@ namespace POO
         IPedir pedir;
         IRepoLibro repoLibro;
 
-        public EditarLibro(IMuestra muestraParametro, IPedir pedirParametro, IRepoLibro RepoLibro) 
+        public EditarLibro(IMuestra muestra, IPedir pedir, IRepoLibro repoLibro) 
         {
-            muestra = muestraParametro;
-            pedir = pedirParametro;
-            repoLibro = RepoLibro;
+            this.muestra = muestra;
+            this.pedir = pedir;
+            this.repoLibro = repoLibro;
 
         }
-        public void Editar(List<Libro> libros) 
+        public void Edicion() 
         {
             Console.WriteLine("Que libro deseas editar?");
-            muestra.MuestraInventario(libros);
-            var libroAEditar = pedir.PedirCadena();
+            muestra.InventarioDeLibros();
+            var libroAEditar = pedir.Cadena();
 
-            Editarlo(libroAEditar.ToLower());
+            Editar(libroAEditar.ToLower());
         }
-        private void Editarlo(string libroAEditar)
+        private void Editar(string libroAEditar)
         {
-            var libro = repoLibro.BuscarLibro(libroAEditar);
+            var libro = repoLibro.Buscar(libroAEditar);
 
             if (libro != null)
             {
                 Console.WriteLine("Que deseas modificar:\n1. Titulo: {0}\n2. Autor: {1}\n3. Genero: {2}", libro.Titulo, libro.Autor, libro.Genero);
-                var eleccion = pedir.PedirCadena();
+                var eleccion = pedir.Cadena();
 
                 if (eleccion == "1" || eleccion.ToLower() == "titulo")
                 {
                     Console.WriteLine("Cual es el nuevo Titulo?");
-                    var nuevoTitulo = pedir.PedirCadena();
-                    var libroYaExiste = repoLibro.LibroExistente(nuevoTitulo);
-                    if (libroYaExiste)
+                    var nuevoTitulo = pedir.Cadena();
+                    var tituloYaExiste = repoLibro.TituloYaExiste(nuevoTitulo);
+
+                    if (tituloYaExiste)
                     {
-                        Console.WriteLine("Este tiutlo ya existe");
+                        Console.WriteLine("Este titulo ya existe");
                         return;
                     }
 
-                    repoLibro.EditarTitulo(libro, nuevoTitulo);
+                    libro.Titulo = nuevoTitulo;
+                    repoLibro.Modificar(libro);
 
                 }
                 else if (eleccion == "2" || eleccion.ToLower() == "autor")
                 {
                     Console.WriteLine("Cual es el nuevo Autor?");
-                    var nuevoAutor = pedir.PedirCadena();
-                    repoLibro.EditarAutor(libro, nuevoAutor);
+                    var nuevoAutor = pedir.Cadena();
 
+                    libro.Autor = nuevoAutor;
+                    repoLibro.Modificar(libro);
 
                 }
                 else if (eleccion == "3" || eleccion.ToLower() == "genero")
                 {
                     Console.WriteLine("Cual es el nuevo Genero?");
-                    var nuevoGenero = pedir.PedirCadena();
-                    repoLibro.EditarGenero(libro, nuevoGenero);
+                    var nuevoGenero = pedir.Cadena();
+
+                    libro.Genero = nuevoGenero;
+                    repoLibro.Modificar(libro);
 
                 }
                 else Console.WriteLine("Su seleccion es incorrecta");

@@ -6,8 +6,8 @@ using System.Threading.Tasks;
 
 namespace POO
 {
-    internal interface IDevolucionLibro
+    internal interface IDevolverLibro
     {
-        void Devolucion(List<Prestamo> prestamos, Usuario usuario);
+        void Devolucion(Usuario usuario);
     }
 }

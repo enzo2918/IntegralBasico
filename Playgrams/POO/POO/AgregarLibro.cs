@@ -11,46 +11,47 @@ namespace POO
         IPedir pedir;
         IRepoLibro repoLibro;
         
-        public AgregarLibro(IPedir pedirParametro, IRepoLibro repoLibroParametro) 
+        public AgregarLibro(IPedir pedir, IRepoLibro repoLibro) 
         {
-            pedir = pedirParametro;
-            repoLibro = repoLibroParametro;
+            this.pedir = pedir;
+            this.repoLibro = repoLibro;
         }
-        public void Agregar()
-        {
-            Console.WriteLine("Cual es el titulo del libro?");
-            var titulo = pedir.PedirCadena();
 
-            var libroYaExiste = repoLibro.LibroExistente(titulo);
-            if (libroYaExiste)
+        public void Agregacion()
+        {
+            Console.WriteLine("Ingrese el titulo del libro?");
+            var tituloLibro = pedir.Cadena();
+
+            var tituloYaExiste = repoLibro.TituloYaExiste(tituloLibro);
+            if (tituloYaExiste)
             {
                 Console.WriteLine("Este titulo ya existe");
                 return;
             }
 
             Console.WriteLine("Quien es el autor?");
-            var autor = pedir.PedirCadena();
+            var autorLibro = pedir.Cadena();
 
 
             Console.WriteLine("A que genero literario pertenece\nDrama\nFiccion\n" +
                 "Misterio\nRomance\nAutoayuda");
-            var genero = PedirGenero();
-            
+            var generoLibro = PedirGenero();
 
-            repoLibro.Crearlo(titulo, autor, genero);
+            var nuevoLibro = new Libro(tituloLibro.ToLower(), autorLibro.ToLower(), generoLibro.ToLower());
+            repoLibro.Añadir(nuevoLibro);
 
             
         }
 
         private string PedirGenero()
         {
-            var genero = "";
+            string generoLibro;
             bool generoCorrecto = false;
 
             do
             {
-                genero = pedir.PedirCadena();
-                if (genero.ToLower() == "drama" || genero == "ficcion" || genero == "misterio" || genero == "romance" || genero == "autoayuda")
+                generoLibro = pedir.Cadena();
+                if (generoLibro.ToLower() == "drama" || generoLibro == "ficcion" || generoLibro == "misterio" || generoLibro == "romance" || generoLibro == "autoayuda")
                 {
                     generoCorrecto = true;
                 }
@@ -58,21 +59,9 @@ namespace POO
 
             } while (!generoCorrecto);
 
-            return genero;
+            return generoLibro;
         }
-        //private void Crearlo(string titulo, string autor, string genero, List<Libro> libros)
-        //{
-        //    libros.Add(new Libro(titulo.ToLower(), autor.ToLower(), genero.ToLower()));
-
-            //for (int n = 0; n < libros.Count; n++)
-            //{
-            //    if (libros[n] == null)
-            //    {
-            //        libros[n] = new Libro(titulo.ToLower(), autor.ToLower(), genero.ToLower());
-            //        break;
-            //    }
-            //}
-        //}
+        
         
     }
 }

@@ -8,19 +8,19 @@ namespace POO
 {
     internal class Pedir:IPedir
     {
-        private string dato = "";
-        private int seleccion = 0;
-        public int PedirEntero() 
+        private string cadena;
+        private int entero;
+        public int Entero() 
         {
             
-            dato = Console.ReadLine();
-            seleccion = Convert.ToInt32(dato);
-            return seleccion;
+            cadena = Console.ReadLine();
+            entero = Convert.ToInt32(cadena);
+            return entero;
         }
-        public string PedirCadena()
+        public string Cadena()
         {
-            dato = Console.ReadLine();
-            return dato;
+            cadena = Console.ReadLine();
+            return cadena;
         }
 
     }

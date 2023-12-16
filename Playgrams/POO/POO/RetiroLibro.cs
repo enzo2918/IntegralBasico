@@ -12,35 +12,36 @@ namespace POO
         IPedir pedir;
         IRepoLibro repoLibro;
         IRepoPrestamo repoPrestamo;
-        public RetiroLibro(IMuestra muestraParametro, IPedir pedirParametro, IRepoLibro RepoLibro,IRepoPrestamo RepoPrestamo)
+        public RetiroLibro(IMuestra muestra, IPedir pedir, IRepoLibro repoLibro,IRepoPrestamo repoPrestamo)
         {
-            muestra = muestraParametro;
-            pedir = pedirParametro;
-            repoLibro = RepoLibro;
-            repoPrestamo  = RepoPrestamo;
+            this.muestra = muestra;
+            this.pedir = pedir;
+            this.repoLibro = repoLibro;
+            this.repoPrestamo  = repoPrestamo;
         }
-        public void Retiro(List<Libro> libros,Usuario usuario)
+        public void Retiro(Usuario usuario)
         {
             Libro libroARetirar;
             string categoria;
-            string titulo = "";
+            string tituloLibro = "";
 
             Console.WriteLine("Por cual categoria deseas buscar tu libro:\n" +
             "1. Titulo\n2. Autor\n3. Genero\n4. Inventario completo\n5. Salir");
-            categoria = pedir.PedirCadena();
+            categoria = pedir.Cadena();
+
             switch (categoria)
             {
                 case "1":
-                    titulo = PorTitulo(libros);
+                    tituloLibro = PorTitulo();
                     break;
                 case "2":
-                    titulo = PorAutor(libros);
+                    tituloLibro = PorAutor();
                     break;
                 case "3":
-                    titulo = porGenero(libros);
+                    tituloLibro = porGenero();
                     break;
                 case "4":
-                    titulo = PorInventario(libros);
+                    tituloLibro = PorInventario();
                     break;
                 case "5":
                     break;
@@ -49,54 +50,57 @@ namespace POO
                     break;
 
             }
-            libroARetirar = Retirar(titulo);
+
+            libroARetirar = BuscarLibro(tituloLibro);
 
             if (libroARetirar != null)
             {
                 var libroYaRetirado = LibroYaRetirado(libroARetirar,usuario);
+
                 if (libroYaRetirado== "YaPrestadoAOtro") Console.WriteLine("Este libro se encuentra en posesion de otra persona"); 
                 else if (libroYaRetirado == "YaPrestado") Console.WriteLine("Este libro ya se encuentra en tu posesion");
-                else Prestarlo(usuario,libroARetirar);
+
+                else Retirar(usuario,libroARetirar);
             }
 
         }
-        private string PorTitulo(List<Libro> libros)
+        private string PorTitulo()
         {
             Console.WriteLine("Cual es el titulo del libro que buscas?");
-            var titulo = pedir.PedirCadena();
+            var titulo = pedir.Cadena();
             return titulo;
 
         }
              
-        private string PorAutor(List<Libro> libros)
+        private string PorAutor()
         {
             Console.WriteLine("Cual es el autor del libro que buscas?");
-            var autor = pedir.PedirCadena();
-            muestra.MuestraAutor(autor, libros);
+            var autor = pedir.Cadena();
+            muestra.LibrosPorAutor(autor);
             Console.WriteLine("Que libro deseas?");
-            var titulo = pedir.PedirCadena();
+            var titulo = pedir.Cadena();
             return titulo;
         }
-        private string porGenero(List<Libro> libros)
+        private string porGenero()
         {
             Console.WriteLine("Que genero literario buscas:\nDrama\nFiccion\nMisterio\nRomance\nAutoayuda");
-            var genero = pedir.PedirCadena();
-            muestra.MuestraGeneros(genero, libros);
+            var genero = pedir.Cadena();
+            muestra.LibrosPorGenero(genero);
             Console.WriteLine("Que libro deseas?");
-            var titulo = pedir.PedirCadena();
+            var titulo = pedir.Cadena();
             return titulo;
         }
-        private string PorInventario(List<Libro> libros)
+        private string PorInventario()
         {
-            muestra.MuestraInventario(libros);
+            muestra.InventarioDeLibros();
             Console.WriteLine("\nCual libro deseas retirar?");
-            var titulo = pedir.PedirCadena();
+            var titulo = pedir.Cadena();
             return titulo;
             
         }
-        private Libro Retirar(string titulo)
+        private Libro BuscarLibro(string titulo)
         {
-            var libroARetirar = repoLibro.BuscarLibro(titulo);
+            var libroARetirar = repoLibro.Buscar(titulo);
             if (libroARetirar != null) return libroARetirar;
             else
             {
@@ -106,48 +110,23 @@ namespace POO
         }
         private string LibroYaRetirado(Libro libroARetirar,Usuario usuario)
         {
-            var Prestamo = repoPrestamo.LibroYaPrestado(libroARetirar);
+            var Prestamo = repoPrestamo.Buscar(libroARetirar);
             if (Prestamo != null)
             {
                 if (Prestamo.Cliente != usuario) return "YaPrestadoAOtro";
                 else return "YaPrestado";
             }
-            else return "Disponible";
-
-
-            //for (int n = 0; n < prestamos.Count; n++)
-            //{
-            //    if (prestamos[n] != null)
-            //    {
-            //        if (prestamos[n].LibroAPrestar == libroARetirar)
-            //        {
-            //            if (prestamos[n].Cliente != usuario) return "YaPrestadoAOtro";
-            //            else return "YaPrestado";
-            //        }                    
-            //    }
-            //}                           
-            //return"Disponible";
+            else return "Disponible";           
         }
         
-        private void Prestarlo(Usuario usuario,Libro libroARetirar)
+        private void Retirar(Usuario usuario,Libro libroARetirar)
         {
             DateTime fechaDePrestamo = DateTime.Now;
-            repoPrestamo.PrestarLibro(usuario, libroARetirar, fechaDePrestamo);
+            Prestamo prestamo = new Prestamo(usuario, libroARetirar, fechaDePrestamo);
+            repoPrestamo.Añadir(prestamo);
             Console.WriteLine("Su pedido fue hecho exitosamente, recuerde devolver el libro {0}, antes de los siguientes 30 dias " +
                         "a partir de la fecha {1}/{2}/{3}", libroARetirar.Titulo, fechaDePrestamo.Day, fechaDePrestamo.Month, fechaDePrestamo.Year);
 
-            //for (int n =0;n< prestamos.Count; n++)
-            //{
-            //    if (prestamos[n] == null)
-            //    {
-            //        DateTime fechaDePrestamo = DateTime.Now;
-            //        prestamos[n] = new Prestamo(usuario, libroARetirar, fechaDePrestamo);
-            //        Console.WriteLine("Su pedido fue hecho exitosamente, recuerde devolver el libro {0}, antes de los siguientes 30 dias " +
-            //            "a partir de la fecha {1}/{2}/{3}", libroARetirar.Titulo, fechaDePrestamo.Day,fechaDePrestamo.Month,fechaDePrestamo.Year);                    
-            //        break;
-            //    }
-                
-            //}
         }
     }
 }

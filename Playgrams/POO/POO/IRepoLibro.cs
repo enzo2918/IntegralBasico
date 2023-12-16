@@ -8,12 +8,12 @@ namespace POO
 {
     internal interface IRepoLibro
     {
-        void Crearlo(string titulo, string autor, string genero);
-        bool LibroExistente(string titulo);
-        Libro BuscarLibro(string libroABuscar);
-        void EditarTitulo(Libro libroAEditar, string nuevoTitulo);
-        void EditarAutor(Libro libroAEditar, string nuevoAutor);
-        void EditarGenero(Libro libroAEditar, string nuevoGenero);
-        void EliminarLibro(Libro libroAEliminar);
+
+        List<Libro> TraerLista();
+        void Añadir(Libro libro);
+        bool TituloYaExiste(string titulo);
+        Libro Buscar(string libroABuscar);
+        void Modificar(Libro libro);
+        void Borrar(Libro libroAEliminar);
     }
 }

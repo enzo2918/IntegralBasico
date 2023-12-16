@@ -8,33 +8,31 @@ namespace POO
 {
     internal class Inicio:IInicio
     {
-        List<Libro> libros;
-        List<Prestamo> prestamos;
+
 
         IPedir pedir;
-        IAgregarLibro agrega;
-        IDevolucionLibro devuelve;
-        IEditarLibro edita;
-        IEliminarLibro elimina;
-        IIngreso ingreso;
-        IRetiroLibro retira;
+        IAgregarLibro agregar;
+        IDevolverLibro devolver;
+        IEditarLibro editar;
+        IEliminarLibro eliminar;
+        IIngreso ingresar;
+        IRetiroLibro retirar;
 
-        public Inicio(List<Libro> librosP,List<Prestamo> prestamosP, IPedir pedirP, IAgregarLibro agregaP, IDevolucionLibro devuelveP,
-            IEditarLibro editaP, IEliminarLibro eliminaP, IIngreso ingresoP, IRetiroLibro retiraP) 
+        public Inicio(IPedir pedir, IAgregarLibro agregar, IDevolverLibro devolver,
+            IEditarLibro editar, IEliminarLibro eliminar, IIngreso ingresar, IRetiroLibro retirar) 
         { 
-            libros = librosP;
-            prestamos = prestamosP;
 
-            pedir = pedirP;
-            agrega = agregaP;
-            devuelve = devuelveP;
-            edita = editaP;
-            elimina = eliminaP;
-            ingreso = ingresoP;
-            retira = retiraP;
+
+            this.pedir = pedir;
+            this.agregar = agregar;
+            this.devolver = devolver;
+            this.editar = editar;
+            this.eliminar = eliminar;
+            this.ingresar = ingresar;
+            this.retirar = retirar;
 
         }
-        public void Iniciar ()
+        public void Iniciar()
         {
 
             string Registrado;
@@ -42,35 +40,35 @@ namespace POO
             {
                 Console.WriteLine("Bienvenido a la biblioteca");
                 Console.WriteLine("Estas registrado? 1. Si  2. No 3. Salir");
-                Registrado = pedir.PedirCadena();
+                Registrado = pedir.Cadena();
 
                
                 if (Registrado == "1" || Registrado == "si" || Registrado == "Si")
                 {
-                    var usuarioAIngresar = ingreso.IniciarSesion();
+                    var usuarioAIngresar = ingresar.IniciarSesion();
                     if (usuarioAIngresar!= null)
                     {
                         if (usuarioAIngresar.EsAdministrador)
                         {
-                            var eleccion = "";
+                            string accionARealizar;
                             do
                             {
                                 Console.WriteLine("1. Agregar nuevo libro\n2. Eliminar libro\n3. Editar libro\n4. Salir");
-                                eleccion = pedir.PedirCadena();
-                                switch (eleccion)
+                                accionARealizar = pedir.Cadena();
+                                switch (accionARealizar)
                                 {
                                     case "1":
-                                        agrega.Agregar();
+                                        agregar.Agregacion();
                                         Console.ReadLine();
                                         Console.Clear();
                                         break;
                                     case "2":
-                                        elimina.Eliminar(libros);
+                                        eliminar.Eliminacion();
                                         Console.ReadLine();
                                         Console.Clear();
                                         break;
                                     case "3":
-                                        edita.Editar(libros);
+                                        editar.Edicion();
                                         Console.ReadLine();
                                         Console.Clear();
                                         break;
@@ -79,25 +77,25 @@ namespace POO
                                     default: Console.WriteLine("Su seleccion es incorrecta");
                                         break;
                                 }
-                            } while (eleccion != "4");
+                            } while (accionARealizar != "4");
                         }
                         else
                         {
-                            string eleccion;
+                            string accionARealizar;
                             do
                             {
                                 Console.WriteLine("1. Pedir libro\n2. Devolver libro\n3. Salir");
-                                eleccion = pedir.PedirCadena();
+                                accionARealizar = pedir.Cadena();
 
-                                switch (eleccion)
+                                switch (accionARealizar)
                                 {
                                     case "1":
-                                        retira.Retiro(libros,usuarioAIngresar);
+                                        retirar.Retiro(usuarioAIngresar);
                                         Console.ReadLine();
                                         Console.Clear();
                                         break;
                                     case "2":
-                                        devuelve.Devolucion(prestamos,usuarioAIngresar);
+                                        devolver.Devolucion(usuarioAIngresar);
                                         Console.ReadLine();
                                         Console.Clear();
                                         break;
@@ -106,14 +104,14 @@ namespace POO
                                     default: Console.WriteLine("Su seleccion es incorrecta");
                                         break;
                                 }
-                            } while (eleccion !="3");
+                            } while (accionARealizar !="3");
                         }
                     }                    
                 }
                 if (Registrado == "2" || Registrado == "no" || Registrado == "No")
                 {
 
-                    ingreso.RegistarUsuario();
+                    ingresar.RegistarUsuario();
                     Console.ReadLine();
                     Console.Clear();
 

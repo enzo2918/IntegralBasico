@@ -8,24 +8,22 @@ namespace POO
 {
     internal class RepoUsuario:IRepoUsuario
     {
-        List<Usuario> usuarios;
-        public RepoUsuario(List<Usuario> Usuarios) 
-        {
-            usuarios = Usuarios;
+        List<Usuario> usuarios = new List<Usuario>();
+
+        public RepoUsuario()
+        {         
+            Usuario usuarioAdministrador = new Usuario("Enzo", "x", "x", true);
+            usuarios.Add(usuarioAdministrador);
         }
-        public Usuario BuscarUsuario(string nombreUsuario)
+        public Usuario Buscar(string nombreUsuario)
         {
-            var usuario = usuarios.FirstOrDefault(p => nombreUsuario == p.NombreUsuario);
-            return usuario;
+            var usuarioBuscado = usuarios.FirstOrDefault(p => nombreUsuario == p.NombreUsuario);
+            return usuarioBuscado;
+
         }
-        public bool ContraseñaCorrecta(string contraseña,Usuario usuario)
+        public void Añadir(Usuario usuario)
         {
-            var contraseñaEsCorrecta = usuario.Contraseña == contraseña;
-            return contraseñaEsCorrecta;
-        }
-        public void Registrar(string nombreCompleto, string nombreUsuario, string contraseña)
-        {
-            usuarios.Add(new Usuario(nombreCompleto, nombreUsuario, contraseña, false));
+            usuarios.Add(usuario);
         }
     }
 }

@@ -8,7 +8,7 @@ namespace POO
 {
     internal interface IPedir
     {
-        int PedirEntero();
-        string PedirCadena();
+        int Entero();
+        string Cadena();
     }
 }

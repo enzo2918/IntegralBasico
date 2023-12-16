@@ -8,10 +8,11 @@ namespace POO
 {
     internal interface IRepoPrestamo
     {
-        Prestamo BuscarPrestamo(Libro libroADevolver, Usuario usuario);
+        List<Prestamo> TraerLista();
+        Prestamo Buscar(Libro libroADevolver, Usuario usuario);
 
-        void Devolver(Prestamo prestamo);
-        Prestamo LibroYaPrestado(Libro libroARetirar);
-        void PrestarLibro(Usuario usuario, Libro libroARetirar, DateTime fechaDePrestamo);
+        void Borrar(Prestamo prestamo);
+        Prestamo Buscar(Libro libroARetirar);
+        void Añadir(Prestamo prestamo);
     }
 }

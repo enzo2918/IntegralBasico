@@ -44,13 +44,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AgregarLibro.cs" />
-    <Compile Include="Buscador.cs" />
-    <Compile Include="DevolucionLibro.cs" />
+    <Compile Include="DevolverLibro.cs" />
     <Compile Include="EditarLibro.cs" />
     <Compile Include="EliminarLibro.cs" />
     <Compile Include="IAgregarLibro.cs" />
-    <Compile Include="IBuscador.cs" />
-    <Compile Include="IDevolucionLibro.cs" />
+    <Compile Include="IDevolverLibro.cs" />
     <Compile Include="IEditarLibro.cs" />
     <Compile Include="IEliminarLibro.cs" />
     <Compile Include="IIngreso.cs" />

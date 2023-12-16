@@ -8,10 +8,10 @@ namespace POO
 {
     internal interface IMuestra
     {
-        void MuestraInventario(List<Libro> libros);
-        void MuestraAutor(string autor, List<Libro> libros);
-        void MuestraGeneros(string genero, List<Libro> libros);
-        void MuestraLibrosPrestados(List<Prestamo> prestamos, Usuario usuario);
+        void InventarioDeLibros();
+        void LibrosPorAutor(string autor);
+        void LibrosPorGenero(string genero);
+        void LibrosPrestados(Usuario usuario);
 
     }
 }

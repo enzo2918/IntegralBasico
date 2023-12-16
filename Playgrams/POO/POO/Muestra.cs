@@ -8,144 +8,75 @@ namespace POO
 {
     internal class Muestra:IMuestra
     {
-        public void MuestraInventario(List<Libro> libros)
+        IRepoLibro repoLibro;
+        IRepoPrestamo repoPrestamo;
+        public Muestra(IRepoLibro repoLibro,IRepoPrestamo repoPrestamo) 
         {
+            this.repoLibro = repoLibro;
+            this.repoPrestamo = repoPrestamo;
+
+        }
+        public void InventarioDeLibros()
+        {
+            var libros = repoLibro.TraerLista();
             var librosOrdenados = libros.OrderBy(p=>p.Titulo);
 
-
-
-            foreach (Libro n in librosOrdenados)
+            foreach (Libro libro in librosOrdenados)
             {
-                Console.WriteLine("Nombre: {0}", n.Titulo);
-                Console.WriteLine("Autor: {0}", n.Autor);
-                Console.WriteLine("Genero: {0}", n.Genero);
+                Console.WriteLine("Nombre: {0}", libro.Titulo);
+                Console.WriteLine("Autor: {0}", libro.Autor);
+                Console.WriteLine("Genero: {0}", libro.Genero);
                 Console.WriteLine("");
             }
-
-            //OrdenarAlfabeticamente(libros);
-
-            //for (int n = 0; n < libros.Count; n++)
-            //{               
-            //    for (int m = 0; m < libros.Count; m++)
-            //    {
-            //        if (libros[m] != null && libros[m].Posicion == n)
-            //        {
-            //            Console.WriteLine("Nombre: {0}",libros[m].Titulo);
-            //            Console.WriteLine("Autor: {0}", libros[m].Autor);
-            //            Console.WriteLine("Genero: {0}", libros[m].Genero);
-            //            Console.WriteLine("");
-            //        }
-            //    }                                  
-            //}
+           
         }
-        public void MuestraAutor(string autor, List<Libro> libros)
+        public void LibrosPorAutor(string autor)
         {
+            var libros = repoLibro.TraerLista();
+
             var librosConMismoAutor = libros
                 .Where(p => autor == p.Autor)
                 .OrderBy(p => p.Titulo);
 
 
-            foreach (Libro n in librosConMismoAutor)
+            foreach (Libro libro in librosConMismoAutor)
             {
-                Console.WriteLine("Nombre: {0}", n.Titulo);
+                Console.WriteLine("Nombre: {0}", libro.Titulo);
                 Console.WriteLine("");
             }
 
-            //for (int n = 0; n < libros.Count; n++)
-            //{
-            //    if (libros[n] != null)
-            //    {
-            //        if (autor == libros[n].Autor)
-            //        Console.WriteLine(libros[n].Titulo);
-            //    }
-
-            //}
         }
-        public void MuestraGeneros(string genero, List<Libro> libros)
+        public void LibrosPorGenero(string genero)
         {
+            var libros = repoLibro.TraerLista();
+
             var librosConMismoGenero = libros
                 .Where(p => genero == p.Genero)
                 .OrderBy(p => p.Titulo);
 
-            foreach (Libro n in librosConMismoGenero)
+            foreach (Libro libro in librosConMismoGenero)
             {
-                Console.WriteLine("Nombre: {0}", n.Titulo);
+                Console.WriteLine("Nombre: {0}", libro.Titulo);
                 Console.WriteLine("");
-            }
-
-            //for (int n = 0; n < libros.Count; n++)
-            //{
-            //    if (libros[n] != null)
-            //    {
-            //        if (genero == libros[n].Genero)
-            //            Console.WriteLine(libros[n].Titulo);
-            //    }
-
-            //}
+            }           
         }
 
-        public void MuestraLibrosPrestados(List<Prestamo> prestamos,Usuario usuario)
+        public void LibrosPrestados(Usuario usuario)
         {
+            var prestamos = repoPrestamo.TraerLista();
+
             var librosPrestados = prestamos
                 .Where(p => p.Cliente == usuario)
                 .OrderBy(p => p.LibroAPrestar.Titulo);
 
 
-            foreach (Prestamo n in librosPrestados)
+            foreach (Prestamo libro in librosPrestados)
             {
-                Console.WriteLine("Nombre: {0}", n.LibroAPrestar.Titulo);
+                Console.WriteLine("Nombre: {0}", libro.LibroAPrestar.Titulo);
                 Console.WriteLine("");
             }
 
-
-            //for (int n = 0; n < prestamos.Count; n++)
-            //{
-            //    if (prestamos[n] != null && prestamos[n].Cliente == usuario) Console.WriteLine(prestamos[n].LibroAPrestar.Titulo);
-            //}
-        }
-
-
-        //private void OrdenarAlfabeticamente(List<Libro> libros)
-        //{
-        //    for (int a = 0; a < libros.Count; a++)
-        //    {
-        //        if (libros[a] != null)
-        //        {
-        //            libros[a].Posicion = 0;
-        //        }
-        //    }
-        //    for (int n =0; n < libros.Count; n++)
-        //    {
-        //        if (libros[n] != null)
-        //        {
-        //            for (int m = 0; m < libros.Count; m++)
-        //            {
-        //                if (libros[m] != null)
-        //                {
-        //                    if (libros[n] != libros[m])
-        //                    {
-        //                        var contador = 0;
-        //                        for (int l = 0; l < libros[n].Titulo.Length && l < libros[m].Titulo.Length; l++)
-        //                        {    
-                                    
-        //                            if (libros[n].Titulo[l] > libros[m].Titulo[l])
-        //                            {
-        //                                libros[n].Posicion = libros[n].Posicion + 1;
-        //                                break;
-        //                            }
-        //                            else if (libros[n].Titulo[l] < libros[m].Titulo[l]) break;
-        //                            contador++;                                    
-        //                        }
-        //                        if (contador == libros[m].Titulo.Length) libros[n].Posicion++;
-        //                    }
-        //                }
-                        
-
-        //            }
-        //        }
-                
-        //    }
-        //}
+        }      
 
     }
 }

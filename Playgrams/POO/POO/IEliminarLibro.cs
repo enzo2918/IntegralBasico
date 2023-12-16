@@ -8,6 +8,6 @@ namespace POO
 {
     internal interface IEliminarLibro
     {
-        void Eliminar(List<Libro> libros);
+        void Eliminacion();
     }
 }

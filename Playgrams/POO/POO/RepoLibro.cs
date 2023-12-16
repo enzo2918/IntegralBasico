@@ -8,40 +8,33 @@ namespace POO
 {
     internal class RepoLibro : IRepoLibro
     {
-        List<Libro> libros;
-        public RepoLibro(List<Libro> Libros)
-        {
-            libros = Libros;
+        private List<Libro> libros = new List<Libro>();
 
-        }
-        public void Crearlo(string titulo, string autor, string genero)
+        public List<Libro> TraerLista()
         {
-            libros.Add(new Libro(titulo.ToLower(), autor.ToLower(), genero.ToLower()));
+            return libros;
+        } 
+       
+        public void Añadir(Libro libro)
+        {
+            libros.Add(libro);
         }
-        public bool LibroExistente(string titulo)
+        public bool TituloYaExiste(string titulo)
         {
             bool libroYaExiste = libros.Any(p => titulo == p.Titulo);
             return libroYaExiste;
         }
-        public Libro BuscarLibro(string libroABuscar)
+        public Libro Buscar(string libroABuscar)
         {
-            Libro libroADevolver = libros.FirstOrDefault(p => libroABuscar == p.Titulo);
-            return libroADevolver;
+            Libro libroBuscado = libros.FirstOrDefault(p => libroABuscar == p.Titulo);
+            return libroBuscado;
         }
+        public void Modificar(Libro libro) 
+        { 
 
-        public void EditarTitulo(Libro libroAEditar, string nuevoTitulo)
-        {
-            libroAEditar.Titulo = nuevoTitulo;
         }
-        public void EditarAutor(Libro libroAEditar, string nuevoAutor)
-        {
-            libroAEditar.Autor = nuevoAutor;
-        }
-        public void EditarGenero(Libro libroAEditar, string nuevoGenero)
-        {
-            libroAEditar.Genero = nuevoGenero;
-        }
-        public void EliminarLibro(Libro libroAEliminar)
+        
+        public void Borrar(Libro libroAEliminar)
         {
             libros.Remove(libroAEliminar);
 

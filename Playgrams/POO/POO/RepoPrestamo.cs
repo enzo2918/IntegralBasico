@@ -8,28 +8,29 @@ namespace POO
 {
     internal class RepoPrestamo:IRepoPrestamo
     {
-        List<Prestamo> prestamos;
-        public RepoPrestamo(List<Prestamo> Prestamos) 
+        private List<Prestamo> prestamos = new List<Prestamo>();
+        public List<Prestamo> TraerLista()
         {
-            prestamos = Prestamos;
+            return prestamos;
         }
-        public Prestamo BuscarPrestamo(Libro libroADevolver, Usuario usuario)
+
+        public Prestamo Buscar(Libro libroADevolver, Usuario usuario)
         {
-            var prestamo = prestamos.FirstOrDefault(p => libroADevolver == p.LibroAPrestar && p.Cliente == usuario);
-            return prestamo;
+            var prestamoBuscado = prestamos.FirstOrDefault(p => libroADevolver == p.LibroAPrestar && p.Cliente == usuario);
+            return prestamoBuscado;
         }
-        public Prestamo LibroYaPrestado(Libro libroARetirar)
+        public Prestamo Buscar(Libro libroARetirar)
         {
-            var Prestamo = prestamos.FirstOrDefault(p => p.LibroAPrestar == libroARetirar);
-            return Prestamo;
+            var prestamoBuscado = prestamos.FirstOrDefault(p => p.LibroAPrestar == libroARetirar);
+            return prestamoBuscado;
         }
-        public void Devolver(Prestamo prestamo)
+        public void Borrar(Prestamo prestamo)
         {
             prestamos.Remove(prestamo);
         }
-        public void PrestarLibro(Usuario usuario, Libro libroARetirar, DateTime fechaDePrestamo)
+        public void Añadir(Prestamo prestamo)
         {
-            prestamos.Add(new Prestamo(usuario, libroARetirar, fechaDePrestamo));
+            prestamos.Add(prestamo);
         }
     }
 }

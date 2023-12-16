@@ -8,6 +8,6 @@ namespace POO
 {
     internal interface IEditarLibro
     {
-        void Editar(List<Libro> libros);
+        void Edicion();
     }
 }

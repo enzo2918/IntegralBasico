@@ -16,34 +16,29 @@ namespace POO
         IPedir pedir;
         IRepoUsuario repoUsuario;
 
-        public Ingreso(IPedir pedirParametro,IRepoUsuario RepoUsuario)
+        public Ingreso(IPedir pedir,IRepoUsuario repoUsuario)
         {
-            pedir = pedirParametro;
-            repoUsuario = RepoUsuario;
+            this.pedir = pedir;
+            this.repoUsuario = repoUsuario;
         }
 
         public Usuario IniciarSesion()
         {
             Console.WriteLine("Escribe tu nombre de usuario");
-            var nombreUsuario = pedir.PedirCadena();
+            var nombreUsuario = pedir.Cadena();
 
-            var usuario = repoUsuario.BuscarUsuario(nombreUsuario);
+            var usuarioAIngresar = repoUsuario.Buscar(nombreUsuario);
 
-            //var usuario = usuarios.FirstOrDefault(p => nombreUsuario == p.NombreUsuario);
-            //var usuario = BuscarUsuario(nombreUsuario);
-
-            if (usuario == null)
+            if (usuarioAIngresar == null)
             {
                 Console.WriteLine("Su usuario es incorrecto");
                 return null; 
             }
 
             Console.WriteLine("Escribe tu contraseña");
-            var contraseña = pedir.PedirCadena();
+            var contraseña = pedir.Cadena();
 
-            var contraseñaEsCorrecta = repoUsuario.ContraseñaCorrecta(contraseña, usuario);
-
-            //var contraseñaEsCorrecta = usuario.Contraseña == contraseña;
+            var contraseñaEsCorrecta = usuarioAIngresar.Contraseña == contraseña;
 
             if (!contraseñaEsCorrecta)
             {
@@ -51,18 +46,17 @@ namespace POO
                 return null;
             }
 
-            return usuario;
+            return usuarioAIngresar;
         }
         public void RegistarUsuario()
         {
             Console.WriteLine("Escribe tu nombre completo");
-            var nombreCompleto = pedir.PedirCadena();
+            var nombreCompleto = pedir.Cadena();
 
             Console.WriteLine("Crea un usuario");
-            var nombreUsuario = pedir.PedirCadena();
+            var nombreUsuario = pedir.Cadena();
 
-            var usuarioYaExiste = repoUsuario.BuscarUsuario(nombreUsuario);
-            //var usuarioYaExiste = BuscarUsuario(nombreUsuario);
+            var usuarioYaExiste = repoUsuario.Buscar(nombreUsuario);
 
             if (usuarioYaExiste!=null)
             {
@@ -71,32 +65,14 @@ namespace POO
             }
 
             Console.WriteLine("Crea una contraseña");
-            var contraseña = pedir.PedirCadena();
+            var contraseña = pedir.Cadena();
 
-            repoUsuario.Registrar(nombreCompleto, nombreUsuario, contraseña);
+            var administrador = false;
+
+            Usuario usuario = new Usuario(nombreCompleto, nombreUsuario, contraseña, administrador);
+            repoUsuario.Añadir(usuario);
         }
        
-        //private void Registrar(string nombreCompleto, string nombreUsuario, string contraseña)
-        //{
-        //    usuarios.Add(new Usuario(nombreCompleto, nombreUsuario, contraseña, false));
-        //}
-
-        //private Usuario BuscarUsuario(string nombreUsuario)
-        //{
-        //    Usuario usuarioADevolver = null;
-
-        //    for (int n = 0; n < usuarios.Count; n++)
-        //    {
-        //        if (usuarios[n] != null)
-        //        {
-        //            if (nombreUsuario == usuarios[n].NombreUsuario)
-        //            {
-        //                usuarioADevolver = usuarios[n];
-        //                break;
-        //            }
-        //        }
-        //    }
-        //    return usuarioADevolver;
-        //}
+       
     }
 }

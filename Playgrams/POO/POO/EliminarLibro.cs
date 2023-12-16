@@ -11,45 +11,32 @@ namespace POO
         IMuestra muestra;
         IPedir pedir;
         IRepoLibro repoLibro;
-        public EliminarLibro(IMuestra muestraParametro, IPedir pedirParametro,IRepoLibro RepoLibro)
+        public EliminarLibro(IMuestra muestra, IPedir pedir,IRepoLibro repoLibro)
         {
-            muestra = muestraParametro;
-            pedir = pedirParametro;
-            repoLibro = RepoLibro;
+            this.muestra = muestra;
+            this.pedir = pedir;
+            this.repoLibro = repoLibro;
         }
-        public void Eliminar(List<Libro> libros)
+        public void Eliminacion()
         {
             Console.WriteLine("Que libro deseas eliminar?");
 
-            muestra.MuestraInventario(libros);
-            var libroAEliminar = pedir.PedirCadena();
+            muestra.InventarioDeLibros();
+            var libroAEliminar = pedir.Cadena();
 
-            Eliminarlo(libroAEliminar.ToLower());
+            Eliminar(libroAEliminar.ToLower());
         }
        
-        private void Eliminarlo(string libroAEliminar)
+        private void Eliminar(string libroAEliminar)
         {
-            var libro = repoLibro.BuscarLibro(libroAEliminar);
+            var libro = repoLibro.Buscar(libroAEliminar);
+
             if (libro != null)
             {
-                repoLibro.EliminarLibro(libro);
+                repoLibro.Borrar(libro);
                 Console.WriteLine("El libro ha sido eliminado");
             }
-            else Console.WriteLine("El libro que desea eliminar no existe");
-
-            //for (int n = 0;n< libros.Count; n++)
-            //{
-            //    if (libros[n] != null)
-            //    {
-            //        if (peleccion == libros[n].Titulo)
-            //        {
-            //            libros[n] = null;
-            //            return;
-            //        }
-            //    }
-                
-            //}
-            //Console.WriteLine("Este libro no existe");
+            else Console.WriteLine("El libro que desea eliminar no existe");          
             
         }
     }

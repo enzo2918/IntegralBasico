@@ -8,8 +8,7 @@ namespace POO
 {
     internal interface IRepoUsuario
     {
-        Usuario BuscarUsuario(string nombreUsuario);
-        bool ContraseñaCorrecta(string contraseña, Usuario usuario);
-        void Registrar(string nombreCompleto, string nombreUsuario, string contraseña);
+        Usuario Buscar(string nombreUsuario);
+        void Añadir(Usuario usuario);
     }
 }
