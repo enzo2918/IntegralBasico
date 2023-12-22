@@ -17,7 +17,7 @@ namespace POO
             this.muestra = muestra;
             this.pedir = pedir;
             this.repoLibro = repoLibro;
-            this.repoPrestamo  = repoPrestamo;
+            this.repoPrestamo  = repoPrestamo; 
         }
         public void Retiro(Usuario usuario)
         {
