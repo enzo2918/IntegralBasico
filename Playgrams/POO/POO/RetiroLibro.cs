@@ -21,7 +21,6 @@ namespace POO
         }
         public void Retiro(Usuario usuario)
         {
-            Console.WriteLine("hola pepe putito");
             Libro libroARetirar;
             string categoria;
             string tituloLibro = "";
