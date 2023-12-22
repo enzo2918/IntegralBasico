@@ -25,7 +25,7 @@ namespace POO
             string categoria;
             string tituloLibro = "";
 
-            Console.WriteLine("Por cual categoria deseas buscar tu libro:\n" +
+            Console.WriteLine("Selecciona una categoria de busqueda para tu libro:\n" +
             "1. Titulo\n2. Autor\n3. Genero\n4. Inventario completo\n5. Salir");
             categoria = pedir.Cadena();
 
