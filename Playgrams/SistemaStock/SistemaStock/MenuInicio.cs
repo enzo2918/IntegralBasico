@@ -15,10 +15,9 @@ namespace SistemaStock
             var bases = repoBase.TraerLista();
             var contratacionesPorBase = repoContratacionBase.TraerLista();
 
+           
+            bool mostrarStockCero = PedirOpcionMostrarStockCero();
 
-            Console.WriteLine("Desea ver tambien los productos que tengan stock cero? Responda si o no");                
-            string stockCero =  Console.ReadLine().ToLower();
-            Console.WriteLine();
 
 
             foreach (var x in bases) 
@@ -27,7 +26,7 @@ namespace SistemaStock
 
                 if (ultimaContratacion != null)
                 {
-                    MostrarBaseContratada(x,stockCero,ultimaContratacion);
+                    MostrarBaseContratada(x,mostrarStockCero,ultimaContratacion);
 
                 }
                 else Console.WriteLine("Debe contratar a la base {0} para poder ver su stock", x.Name);
@@ -37,7 +36,14 @@ namespace SistemaStock
         }
 
 
+        private bool PedirOpcionMostrarStockCero()
+        {
+            Console.WriteLine("Desea ver tambien los productos que tengan stock cero? Responda si o no");
+            string stockCero = Console.ReadLine().ToLower();
+            Console.WriteLine();
 
+            return stockCero == "si";   
+        }
         private ContratacionBase UltimaContratacion(List<ContratacionBase> contratacionesPorBase, Base x ) 
         {
             var basesContratadas = contratacionesPorBase.Where
@@ -50,34 +56,28 @@ namespace SistemaStock
             return ultimaContratacion;
         } 
 
-        private void MostrarBaseContratada(Base x, string stockCero,ContratacionBase ultimaContratacion)
+        private void MostrarBaseContratada(Base x, bool mostrarStockCero,ContratacionBase ultimaContratacion)
         {
             if (ultimaContratacion.AccionDeContratacion == ContratacionBase.Accion.Alta)
             {
-                MostrarStock(x, stockCero);
+                MostrarStock(x, mostrarStockCero);
 
             }
             else Console.WriteLine("La base {0} no se encuentra contratada, " +
                 "debe abonar para poder ver su stock", x.Name);
         }
 
-        private void MostrarStock(Base x, string stockCero)
+        private void MostrarStock(Base x, bool hayQueMostrarStockCero)
         {
             Console.WriteLine("En base {0} tienes:", x.Name);
-            foreach (Articulo articulo in x.Articulo)
+            foreach (Articulo articulo in x.Articulos)
             {
-                if (stockCero == "no")
-                {
-                    if (articulo.Stock != 0)
-                    {
-                        Console.WriteLine("{0} {1}", articulo.Stock, articulo.Name);
-                        
-                    }
-                }
-                else
+
+                if (articulo.Stock > 0 || hayQueMostrarStockCero)
                 {
                     Console.WriteLine("{0} {1}", articulo.Stock, articulo.Name);
                 }
+
             }
         }
     }
