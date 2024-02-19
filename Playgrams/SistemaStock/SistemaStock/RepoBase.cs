@@ -24,7 +24,7 @@ namespace SistemaStock
                 {
                     Id = 2,
                     Name = "Ciudad",
-                    Articulo =
+                    Articulos =
                     {
                         new Articulo { Name = "Fideos", Code = "fid" },
                         new Articulo { Name = "Lentejas", Code = "len" },
@@ -36,11 +36,11 @@ namespace SistemaStock
                 {
                     Id = 3,
                     Name = "Maipu",
-                    Articulo =
+                    Articulos =
                     {
-                        new Articulo { Name = "Fernet", Code = "fer", Stock = 12 },
-                        new Articulo { Name = "Gancia", Code = "gan", Stock = 4 },
-                        new Articulo { Name = "Vodka", Code = "vod", Stock = 8 }
+                        new Articulo { Name = "Fernet", Code = "fer" },
+                        new Articulo { Name = "Gancia", Code = "gan" },
+                        new Articulo { Name = "Vodka", Code = "vod" }
                     }
                 },
 
@@ -48,14 +48,14 @@ namespace SistemaStock
                 {
                     Id = 4,
                     Name = "Godoy Cruz",
-                    Articulo =
+                    Articulos =
                     {
-                        new Articulo { Name = "Fernet", Code = "fer", Stock = 8 },
-                        new Articulo { Name = "Gancia", Code = "gan", Stock = 6 },
-                        new Articulo { Name = "Vodka", Code = "vod", Stock = 16 },
-                        new Articulo { Name = "Coca", Code = "coc", Stock = 48 },
-                        new Articulo { Name = "Sprite", Code = "spr", Stock = 22 },
-                        new Articulo { Name = "Cepita", Code = "cep", Stock = 0 }
+                        new Articulo { Name = "Fernet", Code = "fer" },
+                        new Articulo { Name = "Gancia", Code = "gan" },
+                        new Articulo { Name = "Vodka", Code = "vod" },
+                        new Articulo { Name = "Coca", Code = "coc" },
+                        new Articulo { Name = "Sprite", Code = "spr" },
+                        new Articulo { Name = "Cepita", Code = "cep" }
                     }
                 }
             }

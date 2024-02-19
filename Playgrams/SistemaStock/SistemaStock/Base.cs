@@ -10,6 +10,7 @@ namespace SistemaStock
     {
         public int Id { get; set; }
         public string Name { get; set; }
-        public List<Articulo> Articulo { get; set; } = new List<Articulo>();
+        public List<Factura> Facturas { get; set; } = new List<Factura>();
+        public List<Articulo> Articulos { get; set; } = new List<Articulo>();
     }
 }
