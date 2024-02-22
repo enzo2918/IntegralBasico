@@ -28,7 +28,8 @@ namespace SistemaStock
                     {
                         new Articulo { Name = "Fideos", Code = "fid" },
                         new Articulo { Name = "Lentejas", Code = "len" },
-                        new Articulo { Name = "Porotos", Code = "por" }
+                        new Articulo { Name = "Porotos", Code = "por" },
+                        new Articulo { Name = "Cepita", Code = "cep" }
                     }
                 },
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -32,19 +33,12 @@ namespace SistemaStock
 
         private List<Articulo> CrearListaConTodosLosArticulos(List<Base> bases)
         {
-            var articulosDeTodasLasBasesRepetidos = new List<Articulo>();
-            foreach (var Base in bases) 
-            {
-                articulosDeTodasLasBasesRepetidos.AddRange(Base.Articulos);
-            }
+            var articulosDeTodasLasBasesRepetidos = bases.SelectMany(_base => _base.Articulos).ToList();
 
-            var articulosDeTodasLasBases = new List<Articulo>();
-            foreach (var articulo in articulosDeTodasLasBasesRepetidos)
-            {
-                var loContiene = articulosDeTodasLasBases.Any(art => art.Code == articulo.Code);
-                if (!loContiene) articulosDeTodasLasBases.Add(articulo);
-            }
-            
+            var articulosDeTodasLasBases = articulosDeTodasLasBasesRepetidos.GroupBy(art => art.Code)
+                                                                            .Select(group => group.First())
+                                                                            .OrderBy(art => art.Name)
+                                                                            .ToList();          
             return articulosDeTodasLasBases;
         }
         private List<Base> CrearListaDeBasesContratadas(List<ContratacionBase> contratacionesBases,List<Base> bases)
@@ -60,7 +54,10 @@ namespace SistemaStock
                     basesContratadas.Add(_base);
                 }
             }
-            return basesContratadas;
+
+            var basesOrdenadasContratadas = basesContratadas.OrderBy(bas => bas.Name).ToList();
+
+            return basesOrdenadasContratadas;
 
            
         }
@@ -107,24 +104,46 @@ namespace SistemaStock
         {
             MostrarEncabezados(basesContratadas);
 
+            Console.WriteLine();
+
             foreach (Articulo articulo in articulosDeTodasLasBases)
-            {
-                Console.Write($"{articulo.Name,-10}\t");
+            {                    
+                var stockDelArticuloEnTodasLasBases = new List<string>();
+                var tieneStockEnAlgunaBase = false;
 
                 foreach (Base _base in basesContratadas)
                 {
+                    var valorStock = string.Empty;
+
                     var articuloAMostrar = _base.Articulos.Find
-                        (art => art.Code == articulo.Code );
+                        (art => art.Code == articulo.Code);
 
-                    var stock = Stock(_base, articuloAMostrar, facturas);
 
-                    if (articuloAMostrar != null && (stock > 0 || hayQueMostrarStockCero))
+                    if (articuloAMostrar != null)
                     {
-                        Console.Write($"{stock,-10}\t");                        
+                        var stock = CalcularStock(_base, articuloAMostrar, facturas);
+
+                        if (stock > 0 || hayQueMostrarStockCero)
+                        {
+                            valorStock = stock.ToString();
+                            tieneStockEnAlgunaBase = true;
+                        }                           
                     }
-                    else Console.Write($"{"",-10}\t");
+
+                    stockDelArticuloEnTodasLasBases.Add(valorStock);
                 }
-                Console.WriteLine();
+
+                if (tieneStockEnAlgunaBase || hayQueMostrarStockCero)
+                {
+                    Console.Write($"{articulo.Name,-10}\t");
+                    Console.Write($"{articulo.Code,-10}\t");
+                    foreach (var valorStock in stockDelArticuloEnTodasLasBases)
+                    {
+                        Console.Write($"{valorStock,-10}\t");
+                    }
+
+                    Console.WriteLine();
+                }                                                                               
             }
             Console.WriteLine();
 
@@ -132,7 +151,8 @@ namespace SistemaStock
 
         private void MostrarEncabezados(List<Base> basesContratadas)
         {
-            Console.Write($"{"articulo",-10}\t");
+            Console.Write($"{"Articulo",-10}\t");
+            Console.Write($"{"Codigo",-10}\t");
             foreach (Base Base in basesContratadas)
             {
                 Console.Write($"{Base.Name,-10}\t");
@@ -142,39 +162,49 @@ namespace SistemaStock
 
         private void MostrarBasesNoContratadas (List<Base> basesNoContratadas)
         {
-            foreach (Base Base in basesNoContratadas)
+            var hayBasesNoContratadas = basesNoContratadas.Any();
+            if ( hayBasesNoContratadas)
             {
-                Console.WriteLine($"Se vencio el periodo contratado de la base {Base.Name}, debe abonar para poder ver su stock" );
-            }
-            Console.WriteLine() ;
+                Console.WriteLine($"Se vencio el periodo contratado de las siguientes bases, debe abonar para poder ver su stock");
+                string basesNC = string.Join(", ", basesNoContratadas.Select(_base => _base.Name));
 
+                Console.WriteLine(basesNC);
+
+                Console.WriteLine();
+            }           
         }
         private void MostrarBasesNuncaContratadas(List<Base> basesNuncaContratadas)
         {
-            foreach (Base Base in basesNuncaContratadas)
+            var hayBasesNuncaContratadas = basesNuncaContratadas.Any();
+            if (hayBasesNuncaContratadas)
             {
-                Console.WriteLine($"Debe contratar a la base {Base.Name} para poder ver su stock");
+                Console.WriteLine($"Debe contratar a las siguientes bases para poder ver su stock");
+                string basesNC = string.Join(", ", basesNuncaContratadas.Select(_base => _base.Name));
+
+                Console.WriteLine(basesNC);
+
+                Console.WriteLine();
             }
-            Console.WriteLine();
         }
-        private int Stock(Base _base, Articulo articulo, List<Factura> facturas)
+        private int CalcularStock(Base _base, Articulo articulo, List<Factura> facturas)
         {
             int stock = 0 ;
 
-            if (articulo != null) 
-            {
-                foreach (Factura factura in facturas)
-                {
-                    var detallesPorArticulo = factura.Detalles
-                        .Where(detalle => (factura.IdBase == _base.Id & detalle.CodeArticulo == articulo.Code));
+            var facturasDeLaBase = facturas.Where(fact => fact.IdBase == _base.Id);
 
-                    foreach (Detalle detalle in detallesPorArticulo)
-                    {
-                        if (factura.TipoFactura == TipoFactura.Ingreso) stock = stock + detalle.Cantidad;
-                        else stock = stock - detalle.Cantidad;
-                    }
-                }
-            }           
+            foreach (Factura factura in facturasDeLaBase)
+            {
+                var cantidadTotalDeArticuloEnFactura = factura.Detalles
+                    .Where(detalle => (detalle.CodeArticulo == articulo.Code))
+                    .Sum(detalle => detalle.Cantidad);
+
+                if (factura.TipoFactura == TipoFactura.Egreso) cantidadTotalDeArticuloEnFactura *= -1;
+
+
+                stock += cantidadTotalDeArticuloEnFactura;
+
+            }
+
             return stock;
         }
     }

@@ -23,7 +23,8 @@ namespace SistemaStock
                     {
                         new Detalle {CodeArticulo = "fid", Cantidad = 2, Precio = 500},
                         new Detalle {CodeArticulo = "len", Cantidad = 3, Precio = 600},
-                        new Detalle {CodeArticulo = "por", Cantidad = 4, Precio = 400}
+                        new Detalle {CodeArticulo = "por", Cantidad = 0, Precio = 400},
+                        new Detalle {CodeArticulo = "cep", Cantidad = 3, Precio = 1500}
                     }
                 },
 
@@ -36,6 +37,8 @@ namespace SistemaStock
                     {
                         new Detalle {CodeArticulo = "fid", Cantidad = 1, Precio = 700},
                         new Detalle {CodeArticulo = "len", Cantidad = 1, Precio = 800},
+                        new Detalle {CodeArticulo = "cep", Cantidad = 3, Precio = 2000}
+
                     }
 
                 },
