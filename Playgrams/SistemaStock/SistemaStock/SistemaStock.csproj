@@ -45,7 +45,12 @@
   <ItemGroup>
     <Compile Include="Articulo.cs" />
     <Compile Include="Base.cs" />
+    <Compile Include="AccionContratacionBase.cs" />
     <Compile Include="ContratacionBase.cs" />
+    <Compile Include="Detalle.cs" />
+    <Compile Include="RepoFactura.cs" />
+    <Compile Include="TipoFactura.cs" />
+    <Compile Include="Factura.cs" />
     <Compile Include="MenuInicio.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

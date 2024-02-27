@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace SistemaStock
 {
-    internal class Articulo
+    public enum AccionContratacionBase
     {
-        public string Name { get; set; }
-        public string Code { get; set; }
-
+        Alta,
+        Baja
     }
 }

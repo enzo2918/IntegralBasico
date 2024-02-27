@@ -6,10 +6,14 @@ using System.Threading.Tasks;
 
 namespace SistemaStock
 {
-    internal class ContratacionBase
+    internal class Factura
     {
+        public List<Detalle> Detalles { get; set; } = new List<Detalle>();
+
         public int IdBase { get; set; }
-        public DateTime Fecha { get; set; }
-        public AccionContratacionBase AccionDeContratacion { get; set; }
+        public int Id { get; set; }
+
+        public TipoFactura TipoFactura { get; set; }
+
     }
 }

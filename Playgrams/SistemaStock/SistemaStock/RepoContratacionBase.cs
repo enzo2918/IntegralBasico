@@ -16,11 +16,13 @@ namespace SistemaStock
             contratacionesPorBase.AddRange(new List<ContratacionBase>
             {
                 new ContratacionBase
-                {IdBase = 3, AccionDeContratacion = ContratacionBase.Accion.Alta, Fecha = new DateTime(2023,06,23)},
+                {IdBase = 1, AccionDeContratacion = AccionContratacionBase.Alta, Fecha = new DateTime(2023,06,23)},
                 new ContratacionBase
-                {IdBase = 3, AccionDeContratacion = ContratacionBase.Accion.Baja, Fecha = new DateTime(2024,06,23)},
+                {IdBase = 2, AccionDeContratacion = AccionContratacionBase.Alta, Fecha = new DateTime(2022,06,23)},
                 new ContratacionBase
-                {IdBase = 4, AccionDeContratacion = ContratacionBase.Accion.Alta, Fecha = new DateTime(2022,06,23)}
+                {IdBase = 3, AccionDeContratacion = AccionContratacionBase.Alta, Fecha = new DateTime(2024,06,23)},
+                new ContratacionBase
+                {IdBase = 4, AccionDeContratacion = AccionContratacionBase.Alta, Fecha = new DateTime(2022,06,23)}
             }
             );
         }
