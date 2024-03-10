@@ -10,7 +10,7 @@ namespace SistemaStock
     {
         static void Main(string[] args)
         {
-            var inicio = new MenuInicio();
+            var inicio = new Inicio();
 
             inicio.Iniciar();
 

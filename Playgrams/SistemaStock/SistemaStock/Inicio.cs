@@ -7,25 +7,41 @@ using System.Threading.Tasks;
 
 namespace SistemaStock
 {
-    internal class MenuInicio
+    internal class Inicio
     {
         public void Iniciar() 
         {
+            StockPorBase stockPorBase = new StockPorBase();
+            StockPorTienda stockPorTienda = new StockPorTienda();
+            StockPorEtiqueta stockPorEtiqueta = new StockPorEtiqueta();
+            MostrarStock mostrarStock = new MostrarStock();
+
             RepoBase repoBase = new RepoBase();
             RepoContratacionBase repoContratacionBase = new RepoContratacionBase();
             RepoFactura repoFactura = new RepoFactura();
+            RepoTienda repoTienda = new RepoTienda();
+            RepoEtiqueta repoEtiqueta = new RepoEtiqueta();
             var facturas = repoFactura.TraerLista();
             var bases = repoBase.TraerLista();
             var contratacionesPorBase = repoContratacionBase.TraerLista();
-
+            var tiendas = repoTienda.TraerLista();
+            var etiquetas = repoEtiqueta.TraerLista();
+           
             var basesContratadas = CrearListaDeBasesContratadas(contratacionesPorBase, bases);
             var basesNoContratadas = CrearListaDeBasesNoContratadas(contratacionesPorBase, bases);
             var basesNuncaContratadas = CrearListaDeBasesNuncaContratadas(contratacionesPorBase, bases);
             var articulosDeTodasLasBases = CrearListaConTodosLosArticulos(bases);
+            var facturasDeBasesContratadas = CrearListaDeFacturasDeBasesContratadas(basesContratadas, facturas);
+
+
+
+            var stockArticulos = MenuInicio(stockPorBase, stockPorTienda, stockPorEtiqueta, articulosDeTodasLasBases,
+                basesContratadas, facturasDeBasesContratadas, tiendas, etiquetas);
+
             bool hayQueMostrarStockCero = PedirOpcionMostrarStockCero();
 
+            mostrarStock.MostrarStockPorArticulo(stockArticulos, hayQueMostrarStockCero);
 
-            MostrarStockPorBase(articulosDeTodasLasBases, basesContratadas, hayQueMostrarStockCero,facturas);
             MostrarBasesNoContratadas(basesNoContratadas);
             MostrarBasesNuncaContratadas(basesNuncaContratadas);
                                                            
@@ -38,7 +54,7 @@ namespace SistemaStock
             var articulosDeTodasLasBases = articulosDeTodasLasBasesRepetidos.GroupBy(art => art.Code)
                                                                             .Select(group => group.First())
                                                                             .OrderBy(art => art.Name)
-                                                                            .ToList();          
+                                                                            .ToList();
             return articulosDeTodasLasBases;
         }
         private List<Base> CrearListaDeBasesContratadas(List<ContratacionBase> contratacionesBases,List<Base> bases)
@@ -60,6 +76,19 @@ namespace SistemaStock
             return basesOrdenadasContratadas;
 
            
+        }
+        private List<Factura> CrearListaDeFacturasDeBasesContratadas(List<Base> basesContratadas, List<Factura> facturas)
+        {
+            var facturasDeBasesContratadas = new List<Factura>();
+            var facturasDeBaseContratada = new List<Factura>();
+
+            foreach (var _base in basesContratadas)
+            {
+                facturasDeBaseContratada = facturas.Where(fact => fact.IdBase == _base.Id).ToList();
+                facturasDeBasesContratadas.AddRange(facturasDeBaseContratada);
+            }
+
+            return facturasDeBasesContratadas;
         }
         private List<Base> CrearListaDeBasesNoContratadas(List<ContratacionBase> contratacionesBases, List<Base> bases)
         {
@@ -92,74 +121,12 @@ namespace SistemaStock
         private bool PedirOpcionMostrarStockCero()
         {
             Console.WriteLine("Desea ver tambien los productos que tengan stock cero? Responda si o no");
+            Console.WriteLine();
             string stockCero = Console.ReadLine().ToLower();
             Console.WriteLine();
 
             return stockCero == "si";   
-        }
-
-
-        private void MostrarStockPorBase
-            (List<Articulo> articulosDeTodasLasBases, List<Base> basesContratadas, bool hayQueMostrarStockCero, List<Factura> facturas)
-        {
-            MostrarEncabezados(basesContratadas);
-
-            Console.WriteLine();
-
-            foreach (Articulo articulo in articulosDeTodasLasBases)
-            {                    
-                var stockDelArticuloEnTodasLasBases = new List<string>();
-                var tieneStockEnAlgunaBase = false;
-
-                foreach (Base _base in basesContratadas)
-                {
-                    var valorStock = string.Empty;
-
-                    var articuloAMostrar = _base.Articulos.Find
-                        (art => art.Code == articulo.Code);
-
-
-                    if (articuloAMostrar != null)
-                    {
-                        var stock = CalcularStock(_base, articuloAMostrar, facturas);
-
-                        if (stock > 0 || hayQueMostrarStockCero)
-                        {
-                            valorStock = stock.ToString();
-                            tieneStockEnAlgunaBase = true;
-                        }                           
-                    }
-
-                    stockDelArticuloEnTodasLasBases.Add(valorStock);
-                }
-
-                if (tieneStockEnAlgunaBase || hayQueMostrarStockCero)
-                {
-                    Console.Write($"{articulo.Name,-10}\t");
-                    Console.Write($"{articulo.Code,-10}\t");
-                    foreach (var valorStock in stockDelArticuloEnTodasLasBases)
-                    {
-                        Console.Write($"{valorStock,-10}\t");
-                    }
-
-                    Console.WriteLine();
-                }                                                                               
-            }
-            Console.WriteLine();
-
-        }
-
-        private void MostrarEncabezados(List<Base> basesContratadas)
-        {
-            Console.Write($"{"Articulo",-10}\t");
-            Console.Write($"{"Codigo",-10}\t");
-            foreach (Base Base in basesContratadas)
-            {
-                Console.Write($"{Base.Name,-10}\t");
-            }
-            Console.WriteLine();
-        }
-
+        }                       
         private void MostrarBasesNoContratadas (List<Base> basesNoContratadas)
         {
             var hayBasesNoContratadas = basesNoContratadas.Any();
@@ -185,27 +152,45 @@ namespace SistemaStock
 
                 Console.WriteLine();
             }
-        }
-        private int CalcularStock(Base _base, Articulo articulo, List<Factura> facturas)
+        }        
+        private List<StockArticulo> MenuInicio(StockPorBase stockPorBase, StockPorTienda stockPorTienda, StockPorEtiqueta stockPorEtiqueta,
+            List<Articulo> articulosDeTodasLasBases, List<Base> basesContratadas, List<Factura> facturas, List<Tienda> tiendas, List<Etiqueta> etiquetas)
         {
-            int stock = 0 ;
+            
+            List<StockArticulo> stockArticulos = new List<StockArticulo>();
+            var stockCalculado = false;
 
-            var facturasDeLaBase = facturas.Where(fact => fact.IdBase == _base.Id);
-
-            foreach (Factura factura in facturasDeLaBase)
+            do
             {
-                var cantidadTotalDeArticuloEnFactura = factura.Detalles
-                    .Where(detalle => (detalle.CodeArticulo == articulo.Code))
-                    .Sum(detalle => detalle.Cantidad);
+                Console.WriteLine("Desea visualizar el stock por: (Responda 1, 2 o 3)\n1_ Bases\n2_ Tiendas\n3_ Etiquetas");
+                Console.WriteLine();
+                string dato = Console.ReadLine();
+                int categoriaStock = Convert.ToInt32(dato);
+                Console.WriteLine();
 
-                if (factura.TipoFactura == TipoFactura.Egreso) cantidadTotalDeArticuloEnFactura *= -1;
+                switch (categoriaStock)
+                {
+                    case 1:
+                        stockArticulos = stockPorBase.CalcularStockPorBase(articulosDeTodasLasBases, basesContratadas, facturas);
+                        stockCalculado = true;
+                        break;
+                    case 2:
+                        stockArticulos = stockPorTienda.CalcularStocksPorTienda(articulosDeTodasLasBases, tiendas, facturas, basesContratadas);
+                        stockCalculado = true;
+                        break;
+                    case 3:
+                        stockArticulos = stockPorEtiqueta.CalcularStocksPorEtiqueta(articulosDeTodasLasBases, etiquetas, tiendas, facturas);
+                        stockCalculado = true;
+                        break;
+                    default:
+                        Console.WriteLine("Revisa tu eleccion");
+                        break;
 
+                }
 
-                stock += cantidadTotalDeArticuloEnFactura;
-
-            }
-
-            return stock;
+            } while (!stockCalculado);
+            
+            return stockArticulos;
         }
     }
 }
