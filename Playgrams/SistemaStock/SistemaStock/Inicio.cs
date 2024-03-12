@@ -79,16 +79,10 @@ namespace SistemaStock
         }
         private List<Factura> CrearListaDeFacturasDeBasesContratadas(List<Base> basesContratadas, List<Factura> facturas)
         {
-            var facturasDeBasesContratadas = new List<Factura>();
-            var facturasDeBaseContratada = new List<Factura>();
-
-            foreach (var _base in basesContratadas)
-            {
-                facturasDeBaseContratada = facturas.Where(fact => fact.IdBase == _base.Id).ToList();
-                facturasDeBasesContratadas.AddRange(facturasDeBaseContratada);
-            }
-
-            return facturasDeBasesContratadas;
+            var idsDeFacturasDeBasesContratadas = basesContratadas.Select(_base => _base.Id);
+            var facturasDeBasesContratadas = facturas.Where(fact => idsDeFacturasDeBasesContratadas.Contains(fact.IdBase));
+            
+            return facturasDeBasesContratadas.ToList();
         }
         private List<Base> CrearListaDeBasesNoContratadas(List<ContratacionBase> contratacionesBases, List<Base> bases)
         {
