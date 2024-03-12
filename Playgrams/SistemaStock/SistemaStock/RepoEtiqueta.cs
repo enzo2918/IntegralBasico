@@ -24,7 +24,7 @@ namespace SistemaStock
 
         public List<Etiqueta> TraerLista()
         {
-            return etiquetas;
+            return etiquetas.ToList();
         }
 
        

@@ -31,7 +31,7 @@ namespace SistemaStock
 
         public List<ContratacionBase> TraerLista()
         {
-            return contratacionesPorBase;
+            return contratacionesPorBase.ToList();
         }
     }
 }

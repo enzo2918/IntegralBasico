@@ -169,7 +169,7 @@ namespace SistemaStock
 
         public List<Factura> TraerLista()
         {
-            return facturas;
+            return facturas.ToList();
         }
     }
 }

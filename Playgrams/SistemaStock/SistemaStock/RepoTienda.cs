@@ -46,7 +46,7 @@ namespace SistemaStock
 
         public List<Tienda> TraerLista()
         {
-            return tiendas;
+            return tiendas.ToList();
         } 
     }
 }

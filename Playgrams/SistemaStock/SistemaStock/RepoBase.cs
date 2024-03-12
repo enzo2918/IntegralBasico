@@ -82,7 +82,7 @@ namespace SistemaStock
 
         public List<Base> TraerLista()
         {
-            return bases;
+            return bases.ToList();
         }
 
 
