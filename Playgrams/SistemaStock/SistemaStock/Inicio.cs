@@ -33,12 +33,23 @@ namespace SistemaStock
             var articulosDeTodasLasBases = CrearListaConTodosLosArticulos(bases);
             var facturasDeBasesContratadas = CrearListaDeFacturasDeBasesContratadas(basesContratadas, facturas);
 
-
-
-            var stockArticulos = MenuInicio(stockPorBase, stockPorTienda, stockPorEtiqueta, articulosDeTodasLasBases,
-                basesContratadas, facturasDeBasesContratadas, tiendas, etiquetas);
-
+            var tipoDeOrigen = PedirTipoDeOrigen();
             bool hayQueMostrarStockCero = PedirOpcionMostrarStockCero();
+
+            List<StockArticulo> stockArticulos = new List<StockArticulo>();
+
+            switch (tipoDeOrigen)
+            {
+                case 1:
+                    stockArticulos = stockPorBase.CalcularStockPorBase(articulosDeTodasLasBases, basesContratadas, facturasDeBasesContratadas);
+                    break;
+                case 2:
+                    stockArticulos = stockPorTienda.CalcularStocksPorTienda(articulosDeTodasLasBases, tiendas, facturasDeBasesContratadas, basesContratadas);
+                    break;
+                case 3:
+                    stockArticulos = stockPorEtiqueta.CalcularStocksPorEtiqueta(articulosDeTodasLasBases, etiquetas, tiendas, facturasDeBasesContratadas);
+                    break;
+            }
 
             mostrarStock.MostrarStockPorArticulo(stockArticulos, hayQueMostrarStockCero);
 
@@ -147,44 +158,27 @@ namespace SistemaStock
                 Console.WriteLine();
             }
         }        
-        private List<StockArticulo> MenuInicio(StockPorBase stockPorBase, StockPorTienda stockPorTienda, StockPorEtiqueta stockPorEtiqueta,
-            List<Articulo> articulosDeTodasLasBases, List<Base> basesContratadas, List<Factura> facturas, List<Tienda> tiendas, List<Etiqueta> etiquetas)
-        {
-            
-            List<StockArticulo> stockArticulos = new List<StockArticulo>();
-            var stockCalculado = false;
+        private int PedirTipoDeOrigen()
+        {           
+            int tipoDeOrigen;
+            int[] opcionesValidas = new int[] {1,2,3};
 
             do
             {
                 Console.WriteLine("Desea visualizar el stock por: (Responda 1, 2 o 3)\n1_ Bases\n2_ Tiendas\n3_ Etiquetas");
                 Console.WriteLine();
                 string dato = Console.ReadLine();
-                int categoriaStock = Convert.ToInt32(dato);
+                tipoDeOrigen = Convert.ToInt32(dato);
                 Console.WriteLine();
 
-                switch (categoriaStock)
+                if (!opcionesValidas.Contains(tipoDeOrigen))
                 {
-                    case 1:
-                        stockArticulos = stockPorBase.CalcularStockPorBase(articulosDeTodasLasBases, basesContratadas, facturas);
-                        stockCalculado = true;
-                        break;
-                    case 2:
-                        stockArticulos = stockPorTienda.CalcularStocksPorTienda(articulosDeTodasLasBases, tiendas, facturas, basesContratadas);
-                        stockCalculado = true;
-                        break;
-                    case 3:
-                        stockArticulos = stockPorEtiqueta.CalcularStocksPorEtiqueta(articulosDeTodasLasBases, etiquetas, tiendas, facturas);
-                        stockCalculado = true;
-                        break;
-                    default:
-                        Console.WriteLine("Revisa tu eleccion");
-                        break;
-
+                    Console.WriteLine("Revisa tu eleccion");
                 }
 
-            } while (!stockCalculado);
+            } while (!opcionesValidas.Contains(tipoDeOrigen));
             
-            return stockArticulos;
-        }
+            return tipoDeOrigen;
+        }     
     }
 }
