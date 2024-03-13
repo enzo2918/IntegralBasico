@@ -20,16 +20,18 @@ namespace SistemaStock
                 new ContratacionBase
                 {IdBase = 2, AccionDeContratacion = AccionContratacionBase.Alta, Fecha = new DateTime(2022,06,23)},
                 new ContratacionBase
-                {IdBase = 3, AccionDeContratacion = AccionContratacionBase.Alta, Fecha = new DateTime(2024,06,23)},
+                {IdBase = 3, AccionDeContratacion = AccionContratacionBase.Alta, Fecha = new DateTime(2022,06,23)},
                 new ContratacionBase
-                {IdBase = 4, AccionDeContratacion = AccionContratacionBase.Alta, Fecha = new DateTime(2022,06,23)}
+                {IdBase = 4, AccionDeContratacion = AccionContratacionBase.Alta, Fecha = new DateTime(2024,06,23)},
+                new ContratacionBase
+                {IdBase = 5, AccionDeContratacion = AccionContratacionBase.Alta, Fecha = new DateTime(2022,06,23)}
             }
             );
         }
 
         public List<ContratacionBase> TraerLista()
         {
-            return contratacionesPorBase;
+            return contratacionesPorBase.ToList();
         }
     }
 }
