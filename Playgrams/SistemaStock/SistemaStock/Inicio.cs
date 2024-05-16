@@ -30,11 +30,11 @@ namespace SistemaStock
             var basesContratadas = CrearListaDeBasesContratadas(contratacionesPorBase, bases);
             var basesNoContratadas = CrearListaDeBasesNoContratadas(contratacionesPorBase, bases);
             var basesNuncaContratadas = CrearListaDeBasesNuncaContratadas(contratacionesPorBase, bases);
-            var articulosDeTodasLasBases = CrearListaConTodosLosArticulos(bases);
+            var articulosDeTodasLasBases = CrearListaConTodosLosArticulos(basesContratadas);
             var facturasDeBasesContratadas = CrearListaDeFacturasDeBasesContratadas(basesContratadas, facturas);
 
             var tipoDeOrigen = PedirTipoDeOrigen();
-            bool hayQueMostrarStockCero = PedirOpcionMostrarStockCero();
+            bool hayQueMostrarStockCero = PedirOpcionMostrarStockCero(); 
 
             List<StockArticulo> stockArticulos = new List<StockArticulo>();
 

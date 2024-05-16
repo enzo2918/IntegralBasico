@@ -34,9 +34,7 @@ namespace SistemaStock
 
                         stockCalculado = true;
                     }
-
-                    
-
+                   
                     if (stockCalculado)
                     {
                         stockPorTienda.Articulo = articulo;
