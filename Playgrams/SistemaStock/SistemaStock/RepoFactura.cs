@@ -21,10 +21,37 @@ namespace SistemaStock
                     TipoFactura = TipoFactura.Ingreso,
                     Detalles =
                     {
+                        new Detalle {CodeArticulo = "fer", Cantidad = 2, Precio = 7500},
                         new Detalle {CodeArticulo = "fid", Cantidad = 2, Precio = 500},
                         new Detalle {CodeArticulo = "len", Cantidad = 3, Precio = 600},
-                        new Detalle {CodeArticulo = "por", Cantidad = 0, Precio = 400},
+                        new Detalle {CodeArticulo = "por", Cantidad = 1, Precio = 400},
                         new Detalle {CodeArticulo = "cep", Cantidad = 3, Precio = 1500}
+                    }
+                },
+
+                new Factura
+                {
+                    IdBase = 1,
+                    Id = 9,
+                    TipoFactura = TipoFactura.Ingreso,
+                    Detalles =
+                    {
+                        new Detalle {CodeArticulo = "fid", Cantidad = 2, Precio = 500},
+                        new Detalle {CodeArticulo = "len", Cantidad = 3, Precio = 600},
+                        new Detalle {CodeArticulo = "por", Cantidad = 4, Precio = 400}
+                    }
+                },
+
+                new Factura
+                {
+                    IdBase = 1,
+                    Id = 10,
+                    TipoFactura = TipoFactura.Egreso,
+                    Detalles =
+                    {
+                        new Detalle {CodeArticulo = "fid", Cantidad = 1, Precio = 500},
+                        new Detalle {CodeArticulo = "len", Cantidad = 1, Precio = 600},
+                        new Detalle {CodeArticulo = "por", Cantidad = 1, Precio = 400}
                     }
                 },
 
@@ -35,6 +62,7 @@ namespace SistemaStock
                     TipoFactura = TipoFactura.Egreso,
                     Detalles =
                     {
+                        new Detalle {CodeArticulo = "fer", Cantidad = 1, Precio = 7500},
                         new Detalle {CodeArticulo = "fid", Cantidad = 1, Precio = 700},
                         new Detalle {CodeArticulo = "len", Cantidad = 1, Precio = 800},
                         new Detalle {CodeArticulo = "cep", Cantidad = 3, Precio = 2000}
@@ -99,6 +127,40 @@ namespace SistemaStock
                         new Detalle {CodeArticulo = "cep", Cantidad = 3, Precio = 1500}
                     }
 
+                },
+                new Factura
+                {
+                    IdBase = 5,
+                    Id = 7,
+                    TipoFactura = TipoFactura.Ingreso,
+                    Detalles =
+                    {
+                        new Detalle {CodeArticulo = "fer", Cantidad = 1, Precio = 7500},
+                        new Detalle {CodeArticulo = "gan", Cantidad = 2, Precio = 5000},
+                        new Detalle {CodeArticulo = "vod", Cantidad = 1, Precio = 4000},
+                        new Detalle {CodeArticulo = "cep", Cantidad = 4, Precio = 2000},
+                        new Detalle {CodeArticulo = "por", Cantidad = 1, Precio = 2000},
+                        new Detalle {CodeArticulo = "len", Cantidad = 3, Precio = 1500},
+                        new Detalle {CodeArticulo = "fid", Cantidad = 3, Precio = 1500}
+                    }
+
+                },
+                new Factura
+                {
+                    IdBase = 5,
+                    Id = 8,
+                    TipoFactura = TipoFactura.Egreso,
+                    Detalles =
+                    {
+                        new Detalle {CodeArticulo = "fer", Cantidad = 1, Precio = 7500},
+                        new Detalle {CodeArticulo = "gan", Cantidad = 1, Precio = 5000},
+                        new Detalle {CodeArticulo = "vod", Cantidad = 1, Precio = 4000},
+                        new Detalle {CodeArticulo = "cep", Cantidad = 2, Precio = 2000},
+                        new Detalle {CodeArticulo = "por", Cantidad = 1, Precio = 2000},
+                        new Detalle {CodeArticulo = "len", Cantidad = 2, Precio = 1500},
+                        new Detalle {CodeArticulo = "fid", Cantidad = 1, Precio = 1500}
+                    }
+
                 }
             }
             );
@@ -107,7 +169,7 @@ namespace SistemaStock
 
         public List<Factura> TraerLista()
         {
-            return facturas;
+            return facturas.ToList();
         }
     }
 }

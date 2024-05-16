@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SistemaStock
+namespace EF_Prueba
 {
     internal class Program
     {
@@ -12,10 +13,7 @@ namespace SistemaStock
         {
             var inicio = new Inicio();
 
-            inicio.Iniciar();
-
-            Console.ReadLine();
-
+            Console.ReadKey();
         }
     }
 }
