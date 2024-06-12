@@ -4,7 +4,7 @@ using System.Data.SqlClient;
 
 namespace ProgramaEstudiantes
 {
-    internal class RepositorioSql
+    internal class RepositorioSql : IRepositorioSql
     {
         private string _connectionString;
 
@@ -13,7 +13,7 @@ namespace ProgramaEstudiantes
             _connectionString = "Data Source=.\\SQLEXPRESS;Initial Catalog=sistema_estudiantes;Integrated Security=true;";
         }
 
-        public List<TReturn> DevolverDatosTabla<TReturn>(string queryString, Func<SqlDataReader,TReturn> DevolverDatos, List<SqlParameter> parametros = null) 
+        public List<TReturn> DevolverDatosTabla<TReturn>(string queryString, Func<SqlDataReader, TReturn> DevolverDatos, List<SqlParameter> parametros = null)
         {
             var datosADevolver = new List<TReturn>();
             using (SqlConnection connection = new SqlConnection(_connectionString))
@@ -61,7 +61,7 @@ namespace ProgramaEstudiantes
             return datoADevolver;
         }
 
-        public void EjecutarQuery (string queryString,List<SqlParameter> parametros = null)
+        public void EjecutarQuery(string queryString, List<SqlParameter> parametros = null)
         {
             using (SqlConnection connection = new SqlConnection(_connectionString))
             {
@@ -70,12 +70,14 @@ namespace ProgramaEstudiantes
                 using (SqlCommand command = new SqlCommand(queryString, connection))
                 {
                     if (parametros != null)
-                    command.Parameters.AddRange(parametros.ToArray());
+                        command.Parameters.AddRange(parametros.ToArray());
 
                     command.ExecuteNonQuery();
                 }
             }
+
         }
+
 
     }
 }

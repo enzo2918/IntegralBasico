@@ -7,6 +7,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ConnectingSqlServer", "Conn
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProgramaEstudiantes", "ProgramaEstudiantes\ProgramaEstudiantes.csproj", "{D5433069-6E27-4C94-9688-50DD65548441}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EstudiantesTest", "EstudiantesTest\EstudiantesTest.csproj", "{B5DA1476-0A19-4344-8534-6DE5DBEB4678}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -21,6 +23,10 @@ Global
 		{D5433069-6E27-4C94-9688-50DD65548441}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{D5433069-6E27-4C94-9688-50DD65548441}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{D5433069-6E27-4C94-9688-50DD65548441}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B5DA1476-0A19-4344-8534-6DE5DBEB4678}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B5DA1476-0A19-4344-8534-6DE5DBEB4678}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B5DA1476-0A19-4344-8534-6DE5DBEB4678}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B5DA1476-0A19-4344-8534-6DE5DBEB4678}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

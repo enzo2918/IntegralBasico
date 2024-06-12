@@ -6,12 +6,14 @@ using System.Threading.Tasks;
 
 namespace ProgramaEstudiantes
 {
-    internal class Curso
+    public class Curso
     {
         public int Id { set; get; }
         public string Name { set; get; }
         public bool Archivado { set; get; }
         public int IdEscuela { set; get; }
+        public Escuela Escuela { set; get; }
+        public ICollection<EstudianteCurso> EstudiantesCursos { set; get; }
         public override string ToString()
         {
             return $"Nombre Curso: {Name}";
