@@ -1,5 +1,9 @@
-﻿using System;
+﻿using ProgramaEstudiantes.Exceptions;
+using ProgramaEstudiantes.Repositorios;
+using ProgramaEstudiantes.Repositorios.ConsultasCrudas;
+using System;
 using System.Collections.Generic;
+using System.Data.Entity.Infrastructure;
 using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
@@ -8,13 +12,26 @@ using System.Threading.Tasks;
 
 namespace ProgramaEstudiantes
 {
-    internal class Inicio
+    public class Inicio
     {
-        private RepositorioSql _repo;
+        private IEstudianteRepositorio _repoEstudiantes;
+        private ICursoRepositorio _repoCursos;
+        private IEscuelaRepositorio _repoEscuelas;
+        private IErrorCRRepositorio _repoError;
+        private IPedir _pedir;
+        private IMostrar _mostrar;
+        private IObtener _obtener;
 
-        public Inicio()
+        public Inicio(IEstudianteRepositorio estudianteRepositorio, ICursoRepositorio cursoRepositorio, 
+            IEscuelaRepositorio escuelaRepositorio, IErrorCRRepositorio errorRepositorio, IPedir pedir, IMostrar mostrar, IObtener obtener)
         {
-            _repo = new RepositorioSql();
+            _repoEstudiantes = estudianteRepositorio;
+            _repoCursos = cursoRepositorio;
+            _repoEscuelas = escuelaRepositorio;
+            _repoError = errorRepositorio;
+            _pedir = pedir;
+            _mostrar = mostrar;
+            _obtener = obtener;
         }
 
         public void IniciarPrograma()
@@ -24,20 +41,20 @@ namespace ProgramaEstudiantes
 
             do
             {
-                Console.WriteLine("Seleccione la opcion que desee realizar:\n" +
-                    "1. Consultar todos los estudiantes\n" +
-                    "2. Consultar un estudiante en detalle\n" +
-                    "3. Agregar un estudiante\n" +
-                    "4. Modificar un estudiante\n" +
-                    "5. Eliminar un estudiante\n" +
-                    "6. Inscribir estudiante a una escuela\n" +
-                    "7. Inscribir estudiante a un curso\n" +
-                    "8. Desinscribir estudiante de una escuela\n" +
-                    "9. Desinscribir estudiante de un curso\n" +
-                    "10. Salir");
-                Console.WriteLine();
+                var menuOpciones = "Seleccione la opcion que desee realizar:" + Environment.NewLine +
+                    "1. Consultar todos los estudiantes" + Environment.NewLine +
+                    "2. Consultar un estudiante en detalle" + Environment.NewLine +
+                    "3. Agregar un estudiante" + Environment.NewLine +
+                    "4. Modificar un estudiante" + Environment.NewLine +
+                    "5. Eliminar un estudiante" + Environment.NewLine +
+                    "6. Inscribir estudiante a una escuela" + Environment.NewLine +
+                    "7. Inscribir estudiante a un curso" + Environment.NewLine +
+                    "8. Desinscribir estudiante de una escuela" + Environment.NewLine +
+                    "9. Desinscribir estudiante de un curso" + Environment.NewLine +
+                    "10. Largar Error" + Environment.NewLine +
+                    "11. Salir" + Environment.NewLine;
 
-                accionARealizar = Convert.ToInt32(Console.ReadLine());
+                accionARealizar = _pedir.Entero(menuOpciones, (1, 11));
                 Console.WriteLine();
 
                 switch (accionARealizar)
@@ -49,7 +66,7 @@ namespace ProgramaEstudiantes
                         ConsultarEstudianteEnDetalle();
                         break;
                     case 3:
-                        InsertarEstudiante();
+                        CrearEstudiante();
                         break;
                     case 4:
                         ModificarEstudiante();
@@ -58,10 +75,10 @@ namespace ProgramaEstudiantes
                         EliminarEstudiante();
                         break;
                     case 6:
-                        VincularAlumnoEscuela();
+                        InscribirAlumnoEscuela();
                         break;
                     case 7:
-                        VincularAlumnoCursos();
+                        InscribirAlumnoCursos();
                         break;
                     case 8:
                         DesinscribirAlumnoEscuela();
@@ -69,203 +86,86 @@ namespace ProgramaEstudiantes
                     case 9:
                         DesinscribirAlumnoCurso();
                         break;
+                    case 10:
+                        LargarError();
+                        break;
                 }
 
-            } while (accionARealizar != 10);
+            } while (accionARealizar != 11);
 
         }
 
-
-        private Estudiante DevolverEstudiantes(SqlDataReader reader)
-        {
-            string telefono = "No declarado";
-            if (!(reader["telefono"] is DBNull)) telefono = reader["telefono"].ToString();
-            int? idEscuela = null;
-            if (!(reader["idEscuela"] is DBNull)) idEscuela = int.Parse(reader["idEscuela"].ToString());
-
-            var estudiante = new Estudiante()
-            {
-                Id = int.Parse(reader["id"].ToString()),
-                Name = reader["name"].ToString(),
-                Dni = reader["dni"].ToString(),
-                Telefono = telefono,
-                IdEscuela = idEscuela
-            };
-
-            return estudiante;
-        }
-        private CursoEstudiante DevolverEstudianteCurso(SqlDataReader reader)
-        {
-            return new CursoEstudiante
-            {
-                NombreCurso = reader["nameCurso"].ToString(),
-                IdCurso = int.Parse(reader["idCurso"].ToString()),
-            };
-        }
-        private Estudiante DevolverEstudianteDetallado(SqlDataReader reader)
-        {
-            string telefono = null;
-            DateTime? fechaInscripcion = null;
-            if (!(reader["fechaInscripcion"] is DBNull)) fechaInscripcion = DateTime.Parse(reader["fechaInscripcion"].ToString());
-            if (!(reader["telefono"] is DBNull)) telefono = reader["telefono"].ToString();
-
-
-            var estudiante = new Estudiante()
-            {
-                Id = int.Parse(reader["id"].ToString()),
-                Name = reader["name"].ToString(),
-                Dni = reader["dni"].ToString(),
-                Telefono = telefono,
-                Escuela = reader["escuela"].ToString(),
-                CursosEstudiantes = new List<CursoEstudiante>()
-            };
-
-            if (!(reader["idCurso"] is DBNull))
-            {
-                estudiante.CursosEstudiantes.Add(
-                    new CursoEstudiante
-                    {
-                        NombreCurso = reader["curso"].ToString(),
-                        NombreEstudiante = reader["name"].ToString(),
-                        FechaInscripcion = fechaInscripcion
-                    }
-                );
-            }
-
-            return estudiante;
-        }
-
-        private Escuela DevolverEscuelas(SqlDataReader reader)
-        {
-            var escuela = new Escuela() 
-            { 
-                Name = reader["name"].ToString() ,
-                Id = int.Parse(reader["id"].ToString())
-            };
-            return escuela;
-        } 
-        private Curso DevolverCursos(SqlDataReader reader)
-        {
-            var curso = new Curso()
-            {
-                Id = int.Parse(reader["id"].ToString()),
-                Name = reader["name"].ToString(),
-                Archivado = bool.Parse(reader["archivado"].ToString()),
-                IdEscuela = int.Parse(reader["idEscuela"].ToString())
-            };
-            return curso;
-
-        }
+        #region opciones menus
 
         private void MostrarTodosEstudiantes()
         {
-            var queryString = "Select * from estudiantes order by id";
-            var estudiantes = _repo.DevolverDatosTabla(queryString, DevolverEstudiantes);
-            foreach (var estudiante in estudiantes)
-            {
-                estudiante.MostrarSimplificado();
-            }
-            Console.WriteLine();
-        }
-        private List<Estudiante> MostrarYTraerTodosEstudiantes()
-        {
-            var queryString = "Select * from estudiantes order by id";
-            var estudiantes = _repo.DevolverDatosTabla(queryString, DevolverEstudiantes);
-            foreach (var estudiante in estudiantes)
-            {
-                estudiante.MostrarSimplificado();
-            }
-            Console.WriteLine();
-            return estudiantes;
+            _obtener.EstudiantesYMostrarTodos(); 
         }
 
-        
-
-        private void InsertarEstudiante()
+        private void ConsultarEstudianteEnDetalle()
         {
-            Console.WriteLine("Cual es el nombre del estudiante?");
-            var nombre = Console.ReadLine();
-            Console.WriteLine("Cual es su numero de DNI?");
-            var dni = Console.ReadLine();
-            Console.WriteLine("Cual es su numero de telefono?");
-            var telefono = Console.ReadLine();
-            var queryString = $"insert into estudiantes (name,dni,telefono) values (@nombre,@dni,@telefono)";
-            var parametros = new List<SqlParameter>()
+            _obtener.EstudiantesYMostrarTodos();
+            var nombreDniEstudiante = _pedir.Cadena("Que estudiante deseas ver en detalle? Escribe el nombre o el dni");            
+            var estudiante = _repoEstudiantes.ObtenerEstudianteConRelaciones(nombreDniEstudiante);
+            if (estudiante == null)
             {
-                CrearParametro("@nombre", nombre),
-                CrearParametro("@dni", dni),
-                CrearParametro("@telefono", telefono, true),
-            };
+                throw new EstudianteInexistenteException("Este estudiante no existe", nombreDniEstudiante);
+            }
 
-            _repo.EjecutarQuery(queryString, parametros);
+            _mostrar.EstudianteYRelaciones(estudiante);
+        }
+
+        private void CrearEstudiante()
+        {            
+            var nombre = _pedir.Cadena("Cual es el nombre del estudiante?");            
+            var dni = _pedir.Cadena("Cual es su numero de DNI?");
+            var telefono = _pedir.Cadena("Cual es su numero de telefono?");
+            _repoEstudiantes.InsertarEstudiante(nombre,dni,telefono);
             Console.WriteLine();
         }
 
         private void ModificarEstudiante()
         {
-            var estudiante = TraerYMostrarEstudiantePorDni();
-            if (estudiante == null) return;
+            var estudiante = _obtener.EstudianteDesdeElUsuario();
+            _mostrar.EstudianteCompleto(estudiante);
 
-            Console.WriteLine("Que categoria desea modificar:\n1. Nombre\n2. DNI\n3. Telefono");
-            var columnaAModificar = int.Parse(Console.ReadLine());
-            Console.WriteLine($"Cual es el nuevo valor?");
-            var nuevoValorColumna = Console.ReadLine();
+            var columnaAModificar = _pedir.Entero("Que categoria desea modificar:\n1. Nombre\n2. DNI\n3. Telefono", (1, 3));
+            var nuevoValorColumna = _pedir.Cadena("Cual es el nuevo valor?");
 
-            string queryStringUpdate;
-            var parametrosUpdate = new List<SqlParameter>();
             switch (columnaAModificar)
             {
                 case 1:
-                    queryStringUpdate = $"update estudiantes set name = @valorParametro where id = {estudiante.Id}";
-                    parametrosUpdate.Add(CrearParametro("@valorParametro", nuevoValorColumna));
+                    estudiante.Name = nuevoValorColumna;
                     break;
                 case 2:
-                    queryStringUpdate = $"update estudiantes set dni = @valorParametro where id = {estudiante.Id}";
-                    parametrosUpdate.Add(CrearParametro("@valorParametro", nuevoValorColumna));
+                    estudiante.Dni = nuevoValorColumna;
                     break;
                 case 3:
-                    queryStringUpdate = $"update estudiantes set telefono = @valorParametro where id = {estudiante.Id}";
-                    parametrosUpdate.Add(CrearParametro("@valorParametro", nuevoValorColumna, true));
+                    estudiante.Telefono = nuevoValorColumna;
                     break;
-                default:
-                    return;
             }
 
-            
-
-            _repo.EjecutarQuery(queryStringUpdate, parametrosUpdate);
+            _repoEstudiantes.ActualizarEstudiante(estudiante);
             Console.WriteLine($"Registro modificado");
+            Console.WriteLine();
+
+
+        }
+
+        private void EliminarEstudiante()
+        {
+            var estudiante = _obtener.EstudianteDesdeElUsuario(); 
+            _mostrar.EstudianteCompleto(estudiante);
+            _repoEstudiantes.DesvincularAlumnoDeTodosLosCursos(estudiante.Id);
+            _repoEstudiantes.EliminarEstudiante(estudiante.Id);
+            Console.WriteLine($"Registro eliminado");
             Console.WriteLine();
         }
 
-        private void ConsultarEstudianteEnDetalle()
+        private void InscribirAlumnoEscuela()
         {
-            MostrarTodosEstudiantes();
-            Console.WriteLine("Que estudiante deseas ver en detalle? Escribe el nombre o el dni");
-            var nombreDniEstudiante = Console.ReadLine();            
-            var queryString = "Select est.id,est.name,est.dni,est.telefono,esc.name as 'escuela',ec.fechaInscripcion,c.id as 'idCurso',c.name as 'curso' from estudiantes est " +
-                            "left join escuelas esc on est.idEscuela = esc.id " +
-                            "left join estudianteCurso ec on est.id = ec.idEstudiante " +
-                            "left join cursos c on c.id = ec.idCurso " +
-                            "where (archivado = 0 or archivado is null) and est.id = (select top 1 est3.id from estudiantes est3 where name = @estudiante or dni = @estudiante) ";
-            var parametros = new List<SqlParameter>() { CrearParametro("@estudiante", nombreDniEstudiante), };
-            var estudiantes = _repo.DevolverDatosTabla(queryString, DevolverEstudianteDetallado, parametros);
-            var estudiante = UnificarCursos(estudiantes);
-            if (estudiante != null) estudiante.MostrarDetallado();
-        }
+            var estudiante = _obtener.EstudianteDesdeElUsuario();
 
-        private void VincularAlumnoEscuela()
-        {
-            var estudiantes = MostrarYTraerTodosEstudiantes();
-            Console.WriteLine("Que estudiante deseas inscribir? Escribe el nombre o el dni");
-            var nombreDniEstudiante = Console.ReadLine();
-            var estudiante = estudiantes.FirstOrDefault(est => est.Name.Equals(nombreDniEstudiante, StringComparison.InvariantCultureIgnoreCase)
-                                                             || est.Dni.ToString().Equals(nombreDniEstudiante, StringComparison.InvariantCultureIgnoreCase));
-            if (estudiante == null)
-            {
-                Console.WriteLine("Este estudiante no existe");
-                return;
-            }
             if (estudiante.IdEscuela != null)
             {
                 Console.WriteLine("Este estudiante ya esta inscripto en otra escuela");
@@ -274,10 +174,9 @@ namespace ProgramaEstudiantes
             }
             Console.WriteLine();
 
-            var escuelas = TraerYMostrarTodasLasEscuelas();
-            Console.WriteLine("A que escuela lo quieres vincular?");
-            var nombreEscuela = Console.ReadLine();
-            var escuela = (escuelas).FirstOrDefault(esc => esc.Name.Equals(nombreEscuela, StringComparison.InvariantCultureIgnoreCase));
+            var escuelas = _obtener.EscuelasYMostrar();
+            var nombreEscuela = _pedir.Cadena("A que escuela lo quieres vincular?");
+            var escuela = escuelas.FirstOrDefault(esc => esc.Name.Equals(nombreEscuela, StringComparison.InvariantCultureIgnoreCase));
             if (escuela == null)
             {
                 Console.WriteLine("Esta escuela no existe");
@@ -285,34 +184,21 @@ namespace ProgramaEstudiantes
             }
             Console.WriteLine();
 
-            var queryString = $"update estudiantes set idEscuela = {escuela.Id} where id = {estudiante.Id}";
-            
-            _repo.EjecutarQuery(queryString);
+            _repoEstudiantes.VincularAlumnoEscuela(escuela.Id,estudiante.Id);
             Console.WriteLine($"Alumno inscripto correctamente");
             Console.WriteLine();
         }
 
-        private void VincularAlumnoCursos()
+        private void InscribirAlumnoCursos()
         {
-            var estudiantes = MostrarYTraerTodosEstudiantes();
-            Console.WriteLine("Que estudiante deseas vincular? Escribe el nombre o el dni");
-            var nombreDniEstudiante = Console.ReadLine();
-            var estudiante = estudiantes.FirstOrDefault(est => est.Name.Equals(nombreDniEstudiante, StringComparison.InvariantCultureIgnoreCase) 
-                                                             || est.Dni.ToString().Equals(nombreDniEstudiante, StringComparison.InvariantCultureIgnoreCase));
-            if (estudiante == null)
-            {
-                Console.WriteLine("Este estudiante no existe");
-                return;
-            }
-            Console.WriteLine();
+            var estudiante = _obtener.EstudianteDesdeElUsuario();
 
-            var cursos = TraerYMostrarTodosLosCursosPorEscuela(estudiante);
+            var cursos = _obtener.CursosPorEscuelaYMostrar(estudiante);
             if (cursos == null) return;
-            var cursosEstudiante = ConsultarCursosEstudiante(estudiante.Id);
-            if (cursosEstudiante != null) MostrarCursosEstudiante(cursosEstudiante);
-
-            Console.WriteLine("Que curso deseas vincular?");
-            var nombreCurso = Console.ReadLine();
+            var cursosEstudiante = _repoCursos.ObtenerCursosEstudiante(estudiante.Id);
+            _mostrar.CursosEstudiante(cursosEstudiante);
+            
+            var nombreCurso = _pedir.Cadena("En qué curso deseas inscribir al estudiante?");
             Console.WriteLine();
             var curso = cursos.FirstOrDefault(cur => cur.Name.Equals(nombreCurso, StringComparison.InvariantCultureIgnoreCase));
             if (curso == null)
@@ -327,192 +213,76 @@ namespace ProgramaEstudiantes
                 Console.WriteLine();
                 return;
             }
-
-            var queryString = $"insert into estudianteCurso (idEstudiante,idCurso,fechaInscripcion) " +
-                $"values ({estudiante.Id},{curso.Id},'{DateTime.Now}')";
-
-            _repo.EjecutarQuery(queryString);
+            
+            _repoEstudiantes.VincularAlumnoCursos(estudiante.Id,curso.Id);
             Console.WriteLine($"Registro ingresado");
             Console.WriteLine();
         }
+
         private void DesinscribirAlumnoEscuela()
         {
-            var estudiantes = MostrarYTraerTodosEstudiantes();
-            Console.WriteLine("Que estudiante deseas desinscribir? Escribe el nombre o el dni");
-            var nombreDniEstudiante = Console.ReadLine();
-            var estudiante = estudiantes.FirstOrDefault(est => est.Name.Equals(nombreDniEstudiante, StringComparison.InvariantCultureIgnoreCase)
-                                                             || est.Dni.ToString().Equals(nombreDniEstudiante, StringComparison.InvariantCultureIgnoreCase));
-            if (estudiante == null)
-            {
-                Console.WriteLine("Este estudiante no existe");
-                return;
-            }
+            var estudiante = _obtener.EstudianteDesdeElUsuario();
+
             if (estudiante.IdEscuela == null)
             {
                 Console.WriteLine("Este estudiante no pertenece a ninguna escuela");
                 return;
             }
+            
+            _repoEstudiantes.DesvincularAlumnoDeTodosLosCursos(estudiante.Id);
+            _repoEstudiantes.DesvincularAlumnoEscuela(estudiante.Id);
 
-            var queryString = $"update estudiantes set idEscuela = null where id = {estudiante.Id}";
-            _repo.EjecutarQuery(queryString);
-            var queryStringCursos = $"delete from estudianteCurso where idEstudiante = {estudiante.Id}";
-            _repo.EjecutarQuery(queryStringCursos);
             Console.WriteLine($"Se desinscribio al alumno correctamente");
             Console.WriteLine();
         }
+
         private void DesinscribirAlumnoCurso()
         {
-            var estudiantes = MostrarYTraerTodosEstudiantes();
-            Console.WriteLine("Que estudiante deseas desinscribir? Escribe el nombre o el dni");
-            var nombreDniEstudiante = Console.ReadLine();
-            var estudiante = estudiantes.FirstOrDefault(est => est.Name.Equals(nombreDniEstudiante, StringComparison.InvariantCultureIgnoreCase)
-                                                             || est.Dni.ToString().Equals(nombreDniEstudiante, StringComparison.InvariantCultureIgnoreCase));
-            if (estudiante == null)
-            {
-                Console.WriteLine("Este estudiante no existe");
-                return;
-            }
+            var estudiante = _obtener.EstudianteDesdeElUsuario();
+
             if (estudiante.IdEscuela == null)
             {
                 Console.WriteLine("Este estudiante no pertenece a ninguna escuela");
                 return;
             }
 
-            var cursosEstudiante = ConsultarCursosEstudiante(estudiante.Id);
+            var cursosEstudiante = _repoCursos.ObtenerCursosEstudiante(estudiante.Id); ;
             if (cursosEstudiante.Count == 0)
             {
                 Console.WriteLine("El estudiante no esta inscripto en ningun curso");
                 return;
             }
-            MostrarCursosEstudiante(cursosEstudiante);
+            _mostrar.CursosEstudiante(cursosEstudiante);
             Console.WriteLine("De qué curso deseas desinscribir al alumno?");
-            var nombreCurso = Console.ReadLine();
+            var nombreCurso = _pedir.Cadena("De qué curso deseas desinscribir al alumno?");
             Console.WriteLine();
-            var curso = cursosEstudiante.FirstOrDefault(cur => cur.NombreCurso.Equals(nombreCurso, StringComparison.InvariantCultureIgnoreCase));
-            if (curso == null)
+            var cursoEstudiante = cursosEstudiante.FirstOrDefault(cur => cur.Curso.Name.Equals(nombreCurso, StringComparison.InvariantCultureIgnoreCase));
+            if (cursoEstudiante == null)
             {
                 Console.WriteLine("Este curso no existe");
                 Console.WriteLine();
                 return;
             }
 
-            var queryString = $"delete from estudianteCurso where idEstudiante = {estudiante.Id} and idCurso = {curso.IdCurso}";
-            _repo.EjecutarQuery(queryString);
+            _repoEstudiantes.DesvincularAlumnoCurso(estudiante.Id,cursoEstudiante.IdCurso);
             Console.WriteLine("Alumno desinscripto correctamente");
             Console.WriteLine();
         }
-
-        private SqlParameter CrearParametro(string nombreParametro, string valorParametro, bool nulleable = false)
+        private void LargarError()
         {
-            if (string.IsNullOrWhiteSpace(valorParametro))
-            {
-                if (!nulleable)
-                    throw new Exception("Error de datos");
-                        
-                return new SqlParameter(nombreParametro, DBNull.Value);
-            }
-            else
-                return new SqlParameter(nombreParametro, valorParametro);
+            _repoError.Error();
         }
 
-        private void EliminarEstudiante()
-        {
-            var estudiante = TraerYMostrarEstudiantePorDni();
-            if (estudiante == null) return;
-            var queryString = $"delete from estudiantes where id = {estudiante.Id}";
-            _repo.EjecutarQuery(queryString);
-            Console.WriteLine($"Registro eliminado");
-            Console.WriteLine();
-        }
+        #endregion                                             
 
-        private Estudiante TraerYMostrarEstudiantePorDni()
-        {
-            Console.WriteLine("Cual es el numero de dni del estudiante?");
-            var dni = Console.ReadLine();
-
-            var queryStringSelect = "select * from estudiantes where dni = @dni";
-            var parametrosSelect = new List<SqlParameter>() { CrearParametro("@dni", dni), };
-            var estudiante = _repo.DevolverDatoTabla(queryStringSelect, DevolverEstudiantes, parametrosSelect);
-            if (estudiante == null)
-                Console.WriteLine("El estudiante no existe");
-            else
-                estudiante.MostrarCompleto();
-
-            Console.WriteLine();
-            return estudiante;
-
-        }
-
-        private Estudiante UnificarCursos(List<Estudiante> estudiantes)
-        {
-            if (estudiantes.Count == 0) return null;
-            var estudiante = estudiantes.First();
-            estudiante.CursosEstudiantes = estudiantes.SelectMany(est => est.CursosEstudiantes).ToList();
-
-            return estudiante;
-        }
-        private List<Escuela> TraerYMostrarTodasLasEscuelas()
-        {
-            var queryString = "Select * from escuelas order by name";
-            var escuelas = _repo.DevolverDatosTabla(queryString, DevolverEscuelas);
-            foreach (var escuela in escuelas)
-            {
-                Console.WriteLine(escuela);
-            }
-            Console.WriteLine();
-            return escuelas;
-        }
-
-        private List<Curso> TraerYMostrarTodosLosCursosPorEscuela(Estudiante estudiante)
-        {
-            if (estudiante.IdEscuela == null)
-            {
-                Console.WriteLine("El estudiante no pertenece a ninguna escuela");
-                return null;
-            }
-            else
-            {
-                var queryString = $"Select * from cursos where idEscuela = @idEscuela and archivado = 0 order by name";
-                var parametros = new List<SqlParameter>() { CrearParametro("@idEscuela", estudiante.IdEscuela.ToString(), true) };
-                var cursos = _repo.DevolverDatosTabla(queryString, DevolverCursos, parametros);
-                foreach (var curso in cursos)
-                {
-                    Console.WriteLine(curso);
-                }
-                Console.WriteLine();
-                return cursos;
-            }
-            
-        }
-        private void MostrarCursosEstudiante (List<CursoEstudiante> cursosEstudiante)
-        {
-            Console.WriteLine("Cursos inscrptos del estudiante:");
-          
-            foreach (var ce in cursosEstudiante)
-            {
-                Console.WriteLine(ce.NombreCurso);
-            }
-            Console.WriteLine();
-            
-            
-        }
-
-        private List<CursoEstudiante> ConsultarCursosEstudiante(int idEstudiante)
-        {
-            var queryString = "Select c.name as nameCurso, c.id as idCurso from estudianteCurso ec " +
-                "join cursos c on ec.idCurso = c.id " +
-                $"where ec.idEstudiante = {idEstudiante}";
-            var cursosEstudiante = _repo.DevolverDatosTabla(queryString, DevolverEstudianteCurso);
-            return cursosEstudiante;
-        }
-        private bool EstudianteYaInscripto(string curso,List<CursoEstudiante> cursosInscriptos)
+        private bool EstudianteYaInscripto(string curso,List<EstudianteCurso> cursosInscriptos)
         {
             var inscripto = false;
             if (cursosInscriptos != null)
             {
                 foreach (var c in cursosInscriptos)
                 {
-                    if (c.NombreCurso == curso) inscripto = true;
+                    if (c.Curso.Name == curso) inscripto = true;
                 }
             }
             

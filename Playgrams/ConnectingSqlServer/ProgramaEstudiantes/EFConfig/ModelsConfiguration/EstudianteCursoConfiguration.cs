@@ -6,25 +6,25 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EF_Prueba
+namespace ProgramaEstudiantes.EFConfig.ModelsConfiguration
 {
-    internal class HijoComidaConfiguration : EntityTypeConfiguration<HijoComida>
+    internal class EstudianteCursoConfiguration : EntityTypeConfiguration<EstudianteCurso>
     {
-        public HijoComidaConfiguration()
+        public EstudianteCursoConfiguration() 
         {
-            ToTable("HijoComida");
+            ToTable("estudianteCurso");
 
             // Configuración de la clave primaria
             HasKey(pk => pk.Id);
 
 
             // Configuración de las propiedades
-            Property(pi => pi.Id)   
+            Property(pi => pi.Id)
                 .HasColumnName("Id")
                 .HasDatabaseGeneratedOption(DatabaseGeneratedOption.Identity); // Indica que es autoincremental
 
-
-
+            Property(fi => fi.FechaInscripcion)
+                .HasColumnName("fechaInscripcion");
         }
     }
 }

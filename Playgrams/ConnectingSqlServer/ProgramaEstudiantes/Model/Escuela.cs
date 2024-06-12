@@ -6,11 +6,12 @@ using System.Threading.Tasks;
 
 namespace ProgramaEstudiantes
 {
-    internal class Escuela
+    public class Escuela
     {
         public int Id { get; set; }
         public string Name { get; set; }
-
+        public ICollection<Estudiante> Estudiantes{ get; set; }
+        public ICollection<Curso> Cursos { get; set; }
         public override string ToString()
         {
             return $"Nombre: {Name}";

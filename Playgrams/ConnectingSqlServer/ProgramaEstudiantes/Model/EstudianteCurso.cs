@@ -6,11 +6,13 @@ using System.Threading.Tasks;
 
 namespace ProgramaEstudiantes
 {
-    internal class CursoEstudiante
+    public class EstudianteCurso
     {
-        public string NombreEstudiante {  get; set; }
-        public string NombreCurso { get; set; }
+        public int Id { get; set; }
         public int IdCurso { get; set; }
+        public int IdEstudiante { get; set; }
         public DateTime? FechaInscripcion { get; set; }
+        public Estudiante Estudiante { get; set; }
+        public Curso Curso { get; set; }
     }
 }
